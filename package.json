@@ -1,0 +1,23 @@
+{
+  "name": "@metarhia/sql",
+  "version": "0.0.0",
+  "description": "Metarhia SQL utilities",
+  "main": "sql.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metarhia/sql.git"
+  },
+  "keywords": [
+    "SQL",
+    "Metarhia"
+  ],
+  "author": "Denys Otrishko <shishugi@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/metarhia/sql/issues"
+  },
+  "homepage": "https://github.com/metarhia/sql#readme"
+}
