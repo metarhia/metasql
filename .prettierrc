@@ -3,7 +3,7 @@
   "trailingComma": "es5",
   "overrides": [
     {
-      "files": [".prettierrc", ".eslintrc", ".remarkrc", ".huskyrc"],
+      "files": ["**/.*rc"],
       "options": { "parser": "json" }
     }
   ]
