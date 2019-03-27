@@ -409,3 +409,18 @@ test.testSync('Select where nested raw', (test, { builder, params }) => {
   );
   test.strictSame(params.build(), [42]);
 });
+
+test.testSync('Select where exists', (test, { builder, params }) => {
+  const nested = new SelectBuilder(params).from('table2').where('f1', '=', 42);
+  builder
+    .from('table1')
+    .whereExists(nested)
+    .where('f1', '=', 13);
+  test.strictSame(
+    builder.build(),
+    'SELECT * FROM "table1" WHERE' +
+      ' EXISTS (SELECT * FROM "table2" WHERE "f1" = $1)' +
+      ' AND "f1" = $2'
+  );
+  test.strictSame(params.build(), [42, 13]);
+});
