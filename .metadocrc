@@ -1,5 +1,6 @@
 {
   "files": ["sql.js"],
+  "minHeaderLevel": 2,
   "customLinks": {
     "ParamsBuilder": "../lib/params-builder.js"
   },

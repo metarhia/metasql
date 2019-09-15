@@ -1,14 +1,18 @@
 # API Documentation
 
-### Interface: sql
+## Interface: sql
 
-#### QueryBuilder()
-
-Base class for all QueryBuilders
-
-#### QueryBuilder.prototype.constructor()
+### class QueryBuilder
 
 Base class for all QueryBuilders
+
+#### QueryBuilder.prototype.constructor(params, options)
+
+- `params`: [`<ParamsBuilder>`][paramsbuilder]
+- `options`: [`<Object>`][object]
+  - `escapeIdentifier`: [`<Function>`][function]
+    - `identifier`: [`<string>`][string] to escape
+  - _Returns:_ [`<string>`][string] escaped string
 
 #### QueryBuilder.prototype.build()
 
@@ -16,73 +20,73 @@ _Returns:_ [`<string>`][string]
 
 Generic building method that must return the resulting SQL
 
-#### SelectBuilder()
+### class SelectBuilder extends QueryBuilder
 
-#### SelectBuilder.prototype.constructor()
+#### SelectBuilder.prototype.constructor(params, options)
 
-#### SelectBuilder.prototype.from()
-
-#### SelectBuilder.prototype.select()
-
-#### SelectBuilder.prototype.innerJoin()
-
-#### SelectBuilder.prototype.distinct()
-
-#### SelectBuilder.prototype.where()
-
-#### SelectBuilder.prototype.whereNot()
-
-#### SelectBuilder.prototype.whereNull()
-
-#### SelectBuilder.prototype.whereNotNull()
-
-#### SelectBuilder.prototype.whereIn()
-
-#### SelectBuilder.prototype.whereNotIn()
-
-#### SelectBuilder.prototype.whereAny()
-
-#### SelectBuilder.prototype.whereExists()
-
-#### SelectBuilder.prototype.orderBy()
-
-#### SelectBuilder.prototype.groupBy()
-
-#### SelectBuilder.prototype.limit()
-
-#### SelectBuilder.prototype.offset()
-
-#### SelectBuilder.prototype.count()
-
-#### SelectBuilder.prototype.avg()
-
-#### SelectBuilder.prototype.min()
-
-#### SelectBuilder.prototype.max()
-
-#### SelectBuilder.prototype.sum()
-
-#### SelectBuilder.prototype.processSelect()
-
-#### SelectBuilder.prototype.processOperations()
-
-#### SelectBuilder.prototype.processWhere()
-
-#### SelectBuilder.prototype.processOrder()
+#### SelectBuilder.prototype.avg(field)
 
 #### SelectBuilder.prototype.build()
 
-#### RawBuilder()
+#### SelectBuilder.prototype.count(field = '\*')
 
-#### RawBuilder.prototype.constructor(sqlTemplate, Returns:)
+#### SelectBuilder.prototype.distinct()
+
+#### SelectBuilder.prototype.from(tableName)
+
+#### SelectBuilder.prototype.groupBy(...fields)
+
+#### SelectBuilder.prototype.innerJoin(tableName, leftKey, rightKey)
+
+#### SelectBuilder.prototype.limit(limit)
+
+#### SelectBuilder.prototype.max(field)
+
+#### SelectBuilder.prototype.min(field)
+
+#### SelectBuilder.prototype.offset(offset)
+
+#### SelectBuilder.prototype.orderBy(field, dir = 'ASC')
+
+#### SelectBuilder.prototype.processOperations(query, operations, functionHandlers)
+
+#### SelectBuilder.prototype.processOrder(query, clauses)
+
+#### SelectBuilder.prototype.processSelect(query, clauses)
+
+#### SelectBuilder.prototype.processWhere(query, clauses)
+
+#### SelectBuilder.prototype.select(...fields)
+
+#### SelectBuilder.prototype.sum(field)
+
+#### SelectBuilder.prototype.where(key, cond, value)
+
+#### SelectBuilder.prototype.whereAny(key, value)
+
+#### SelectBuilder.prototype.whereExists(subquery)
+
+#### SelectBuilder.prototype.whereIn(key, conds)
+
+#### SelectBuilder.prototype.whereNot(key, cond, value)
+
+#### SelectBuilder.prototype.whereNotIn(key, conds)
+
+#### SelectBuilder.prototype.whereNotNull(key)
+
+#### SelectBuilder.prototype.whereNull(key)
+
+### class RawBuilder extends QueryBuilder
+
+#### RawBuilder.prototype.constructor(sqlTemplate)
 
 - `sqlTemplate`: [`<Function>`][function]
   - `params`: [`<ParamsBuilder>`][paramsbuilder]
-- `Returns:`: [`<string>`][string] query
+- _Returns:_ [`<string>`][string] query
 
 #### RawBuilder.prototype.build()
 
-#### ParamsBuilder()
+### class ParamsBuilder
 
 Base class for all ParamsBuilders
 
@@ -105,7 +109,7 @@ _Returns:_ [`<string>`][string]
 
 Generic building method that must return the resulting SQL
 
-#### PostgresParamsBuilder()
+### class PostgresParamsBuilder extends [ParamsBuilder][paramsbuilder]
 
 #### PostgresParamsBuilder.prototype.constructor()
 
