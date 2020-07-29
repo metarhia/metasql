@@ -27,22 +27,22 @@
   },
   "homepage": "https://github.com/metarhia/sql#readme",
   "devDependencies": {
-    "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^8.1.0",
-    "@metarhia/doc": "^0.5.6",
-    "eslint": "^6.4.0",
-    "eslint-config-metarhia": "^7.0.0",
-    "eslint-config-prettier": "^6.3.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.0",
-    "husky": "^3.0.5",
-    "metatests": "^0.7.1",
-    "prettier": "^1.18.2",
-    "remark-cli": "^7.0.0",
-    "remark-preset-lint-metarhia": "^2.0.0",
-    "remark-validate-links": "^9.0.1"
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@metarhia/doc": "^0.6.1",
+    "eslint": "^6.8.0",
+    "eslint-config-metarhia": "^7.0.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^3.1.0",
+    "metatests": "^0.7.2",
+    "prettier": "^1.19.1",
+    "remark-cli": "^7.0.1",
+    "remark-preset-lint-metarhia": "^2.0.1",
+    "remark-validate-links": "^9.2.0"
   },
   "dependencies": {
-    "@metarhia/common": "^2.1.0"
+    "@metarhia/common": "^2.2.0"
   }
 }
