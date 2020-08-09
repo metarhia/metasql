@@ -486,3 +486,52 @@ test.testSync('Select simple use alias', (test, { builder }) => {
     'SELECT "f1" AS "hello", "f2" FROM "table1" GROUP BY "hello"'
   );
 });
+
+test.testSync('Select where between', (test, { builder, params }) => {
+  builder
+    .from('table1')
+    .whereBetween('a', 1, 100)
+    .whereBetween('b', 100, 1, true)
+    .whereBetween('c', 'aaa', 'yyy');
+  test.strictSame(
+    builder.build(),
+    `SELECT * FROM "table1"
+     WHERE "a" BETWEEN $1 AND $2
+       AND "b" BETWEEN SYMMETRIC $3 AND $4
+       AND "c" BETWEEN $5 AND $6`.replace(/\n\s+/g, ' ')
+  );
+  test.strictSame(params.build(), [1, 100, 100, 1, 'aaa', 'yyy']);
+});
+
+test.testSync('Select where between not', (test, { builder, params }) => {
+  builder
+    .from('table1')
+    .whereNotBetween('a', 1, 100)
+    .whereNotBetween('b', 'aaa', 'yyy', true);
+  test.strictSame(
+    builder.build(),
+    `SELECT * FROM "table1"
+     WHERE "a" NOT BETWEEN $1 AND $2
+       AND "b" NOT BETWEEN SYMMETRIC $3 AND $4`.replace(/\n\s+/g, ' ')
+  );
+  test.strictSame(params.build(), [1, 100, 'aaa', 'yyy']);
+});
+
+test.testSync('Select where between multiple', (test, { builder, params }) => {
+  builder
+    .from('table1')
+    .whereNotBetween('a', 1, 100)
+    .whereBetween('b', 'xzy', 'yyy', true)
+    .whereNotBetween('c', 'aaa', 'yyy', true)
+    .whereBetween('d', 42, 100);
+  test.strictSame(
+    builder.build(),
+    `SELECT * FROM "table1"
+     WHERE "a" NOT BETWEEN $1 AND $2
+       AND "b" BETWEEN SYMMETRIC $3 AND $4
+       AND "c" NOT BETWEEN SYMMETRIC $5 AND $6
+       AND "d" BETWEEN $7 AND $8`.replace(/\n\s+/g, ' ')
+  );
+  const args = [1, 100, 'xzy', 'yyy', 'aaa', 'yyy', 42, 100];
+  test.strictSame(params.build(), args);
+});
