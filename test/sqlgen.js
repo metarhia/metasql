@@ -442,3 +442,47 @@ test.testSync('Select where exists', (test, { builder, params }) => {
   );
   test.strictSame(params.build(), [42, 13]);
 });
+
+test.testSync('Select simple alias', (test, { builder }) => {
+  builder
+    .from('table1')
+    .selectAs('f1', 'hello')
+    .selectAs('f2', 'bye');
+  test.strictSame(
+    builder.build(),
+    'SELECT "f1" AS "hello", "f2" AS "bye" FROM "table1"'
+  );
+});
+
+test.testSync('Select alias with fn', (test, { builder }) => {
+  builder
+    .from('table1')
+    .selectAs('f1', 'hello')
+    .count('*', 'counted')
+    .select('f2')
+    .max('f1', 'maxf1')
+    .min('f2', 'minf2')
+    .avg('f3', 'avgf3');
+  test.strictSame(
+    builder.build(),
+    `SELECT "f1" AS "hello",
+              count(*) AS "counted",
+              "f2",
+              max("f1") AS "maxf1",
+              min("f2") AS "minf2",
+              avg("f3") AS "avgf3"
+       FROM "table1"`.replace(/\n\s+/g, ' ')
+  );
+});
+
+test.testSync('Select simple use alias', (test, { builder }) => {
+  builder
+    .from('table1')
+    .selectAs('f1', 'hello')
+    .select('f2')
+    .groupBy('hello');
+  test.strictSame(
+    builder.build(),
+    'SELECT "f1" AS "hello", "f2" FROM "table1" GROUP BY "hello"'
+  );
+});
