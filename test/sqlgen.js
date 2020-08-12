@@ -268,6 +268,24 @@ test.testSync('Select multiple operations', (test, { builder, params }) => {
 });
 
 test.testSync(
+  'Select multiple operations order',
+  (test, { builder, params }) => {
+    builder
+      .from('table')
+      .avg('f1')
+      .select('f3')
+      .sum('f2')
+      .select('f4');
+    const query = builder.build();
+    test.strictSame(
+      query,
+      'SELECT avg("f1"), "f3", sum("f2"), "f4" FROM "table"'
+    );
+    test.strictSame(params.build(), []);
+  }
+);
+
+test.testSync(
   'Select multiple operations groupBy',
   (test, { builder, params }) => {
     builder
