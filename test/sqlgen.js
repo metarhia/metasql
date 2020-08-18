@@ -240,6 +240,13 @@ test.testSync('Select where in numbers', (test, { builder, params }) => {
   test.strictSame(params.build(), [1, 2, 3]);
 });
 
+test.testSync('Select where in set', (test, { builder, params }) => {
+  builder.from('table').whereIn('f1', new Set([1, 2, 3]));
+  const query = builder.build();
+  test.strictSame(query, 'SELECT * FROM "table" WHERE "f1" IN ($1, $2, $3)');
+  test.strictSame(params.build(), [1, 2, 3]);
+});
+
 test.testSync('Select where not in numbers', (test, { builder, params }) => {
   builder.from('table').whereNotIn('f1', [1, 2, 3]);
   const query = builder.build();
