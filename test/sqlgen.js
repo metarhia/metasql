@@ -636,3 +636,18 @@ test.testSync(
     test.strictSame(params.build(), [42, 1, 42, 1, 42, 1, 42, 1]);
   }
 );
+
+test.testSync('Select from with alias', (test, { builder, params }) => {
+  builder
+    .from('table1')
+    .from('table1', 't1')
+    .from('table1', 't2')
+    .where('table1.f1', '>', 42);
+  const expectedSql = `SELECT *
+    FROM "table1",
+      "table1" AS "t1",
+      "table1" AS "t2"
+    WHERE "table1"."f1" > $1`;
+  test.strictSame(builder.build(), expectedSql.replace(/\n\s+/g, ' '));
+  test.strictSame(params.build(), [42]);
+});
