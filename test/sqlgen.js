@@ -207,6 +207,21 @@ test.testSync('Select where date', (test, { builder, params }) => {
   test.strictSame(params.build(), [date]);
 });
 
+test.testSync('Select where null', (test, { builder, params }) => {
+  builder.from('table').whereNull('f1');
+  test.strictSame(builder.build(), 'SELECT * FROM "table" WHERE "f1" IS NULL');
+  test.strictSame(params.build(), []);
+});
+
+test.testSync('condition notNull', (test, { builder, params }) => {
+  builder.from('table').whereNotNull('f1');
+  test.strictSame(
+    builder.build(),
+    'SELECT * FROM "table" WHERE "f1" IS NOT NULL'
+  );
+  test.strictSame(params.build(), []);
+});
+
 test.testSync(
   'Select where time with timezone',
   (test, { builder, params }) => {
