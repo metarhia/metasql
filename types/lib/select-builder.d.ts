@@ -18,19 +18,63 @@ export class SelectBuilder extends QueryBuilder<SelectBuilderOptions> {
 
   where(key: string, cond: string, value: any | QueryBuilder): this;
 
+  orWhere(key: string, cond: string, value: any | QueryBuilder): this;
+
   whereNot(key: string, cond: string, value: any | QueryBuilder): this;
+
+  orWhereNot(key: string, cond: string, value: any | QueryBuilder): this;
 
   whereNull(key: string): this;
 
+  orWhereNull(key: string): this;
+
   whereNotNull(key: string): this;
+
+  orWhereNotNull(key: string): this;
+
+  whereBetween(
+    key: string,
+    from: any | QueryBuilder,
+    to: any | QueryBuilder,
+    symmetric?: boolean
+  ): this;
+
+  orWhereBetween(
+    key: string,
+    from: any | QueryBuilder,
+    to: any | QueryBuilder,
+    symmetric?: boolean
+  ): this;
+
+  whereNotBetween(
+    key: string,
+    from: any | QueryBuilder,
+    to: any | QueryBuilder,
+    symmetric?: boolean
+  ): this;
+
+  orWhereNotBetween(
+    key: string,
+    from: any | QueryBuilder,
+    to: any | QueryBuilder,
+    symmetric?: boolean
+  ): this;
 
   whereIn(key: string, conds: Iterable<any> | QueryBuilder): this;
 
+  orWhereIn(key: string, conds: Iterable<any> | QueryBuilder): this;
+
   whereNotIn(key: string, conds: Iterable<any> | QueryBuilder): this;
+
+  orWhereNotIn(key: string, conds: Iterable<any> | QueryBuilder): this;
 
   whereAny(key: string, value: any | QueryBuilder): this;
 
+  orWhereAny(key: string, value: any | QueryBuilder): this;
+
   whereExists(subquery: QueryBuilder): this;
+
+  orWhereExists(subquery: QueryBuilder): this;
 
   orderBy(field: string, dir?: 'ASC' | 'DESC'): this;
 
