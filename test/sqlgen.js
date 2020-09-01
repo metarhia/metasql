@@ -86,6 +86,22 @@ test.testSync('Select where builder', (test, { builder, params }) => {
   test.strictSame(params.build(), [3, 42]);
 });
 
+test.testSync('Select where value builder', (test, { builder, params }) => {
+  builder.from('table').where('f1', '=', b =>
+    b
+      .select('a')
+      .from('table1')
+      .where('f1', '=', 3)
+      .orWhere('f2', '>', 42)
+      .limit(1)
+  );
+  const query = builder.build();
+  const expectedSql = `SELECT * FROM "table" WHERE
+    "f1" = (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2 LIMIT $3)`;
+  test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+  test.strictSame(params.build(), [3, 42, 1]);
+});
+
 test.testSync('Select all single orWhere', (test, { builder, params }) => {
   builder.from('table').orWhere('f1', '=', 3);
   const query = builder.build();
@@ -103,11 +119,43 @@ test.testSync('Select all orWhere builder', (test, { builder, params }) => {
   test.strictSame(params.build(), [3, 42]);
 });
 
+test.testSync('Select orWhere value builder', (test, { builder, params }) => {
+  builder.from('table').orWhere('f1', '=', b =>
+    b
+      .select('a')
+      .from('table1')
+      .where('f1', '=', 3)
+      .orWhere('f2', '>', 42)
+      .limit(1)
+  );
+  const query = builder.build();
+  const expectedSql = `SELECT * FROM "table" WHERE
+    "f1" = (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2 LIMIT $3)`;
+  test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+  test.strictSame(params.build(), [3, 42, 1]);
+});
+
 test.testSync('Select all single where not', (test, { builder, params }) => {
   builder.from('table').whereNot('f1', '=', 3);
   const query = builder.build();
   test.strictSame(query, 'SELECT * FROM "table" WHERE NOT "f1" = $1');
   test.strictSame(params.build(), [3]);
+});
+
+test.testSync('Select whereNot value builder', (test, { builder, params }) => {
+  builder.from('table').whereNot('f1', '=', b =>
+    b
+      .select('a')
+      .from('table1')
+      .where('f1', '=', 3)
+      .orWhere('f2', '>', 42)
+      .limit(1)
+  );
+  const query = builder.build();
+  const expectedSql = `SELECT * FROM "table" WHERE
+    NOT "f1" = (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2 LIMIT $3)`;
+  test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+  test.strictSame(params.build(), [3, 42, 1]);
 });
 
 test.testSync('Select all single orWhere not', (test, { builder, params }) => {
@@ -116,6 +164,25 @@ test.testSync('Select all single orWhere not', (test, { builder, params }) => {
   test.strictSame(query, 'SELECT * FROM "table" WHERE NOT "f1" = $1');
   test.strictSame(params.build(), [3]);
 });
+
+test.testSync(
+  'Select orWhereNot value builder',
+  (test, { builder, params }) => {
+    builder.from('table').orWhereNot('f1', '=', b =>
+      b
+        .select('a')
+        .from('table1')
+        .where('f1', '=', 3)
+        .orWhere('f2', '>', 42)
+        .limit(1)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+    NOT "f1" = (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2 LIMIT $3)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 42, 1]);
+  }
+);
 
 test.testSync('Select all multiple where', (test, { builder, params }) => {
   builder
@@ -343,11 +410,41 @@ test.testSync('Select where in numbers', (test, { builder, params }) => {
   test.strictSame(params.build(), [1, 2, 3]);
 });
 
+test.testSync('Select whereIn value builder', (test, { builder, params }) => {
+  builder.from('table').whereIn('f1', b =>
+    b
+      .select('a')
+      .from('table1')
+      .where('f1', '=', 3)
+      .orWhere('f2', '>', 42)
+  );
+  const query = builder.build();
+  const expectedSql = `SELECT * FROM "table" WHERE
+    "f1" IN (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2)`;
+  test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+  test.strictSame(params.build(), [3, 42]);
+});
+
 test.testSync('Select orWhere in numbers', (test, { builder, params }) => {
   builder.from('table').orWhereIn('f1', [1, 2, 3]);
   const query = builder.build();
   test.strictSame(query, 'SELECT * FROM "table" WHERE "f1" IN ($1, $2, $3)');
   test.strictSame(params.build(), [1, 2, 3]);
+});
+
+test.testSync('Select orWhereIn value builder', (test, { builder, params }) => {
+  builder.from('table').orWhereIn('f1', b =>
+    b
+      .select('a')
+      .from('table1')
+      .where('f1', '=', 3)
+      .orWhere('f2', '>', 42)
+  );
+  const query = builder.build();
+  const expectedSql = `SELECT * FROM "table" WHERE
+    "f1" IN (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2)`;
+  test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+  test.strictSame(params.build(), [3, 42]);
 });
 
 test.testSync('Select whereIn/orWhereIn', (test, { builder, params }) => {
@@ -380,6 +477,24 @@ test.testSync('Select whereNotIn numbers', (test, { builder, params }) => {
   test.strictSame(params.build(), [1, 2, 3]);
 });
 
+test.testSync(
+  'Select whereNotIn value builder',
+  (test, { builder, params }) => {
+    builder.from('table').whereNotIn('f1', b =>
+      b
+        .select('a')
+        .from('table1')
+        .where('f1', '=', 3)
+        .orWhere('f2', '>', 42)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      "f1" NOT IN (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 42]);
+  }
+);
+
 test.testSync('Select orWhereNotIn numbers', (test, { builder, params }) => {
   builder.from('table').orWhereNotIn('f1', [1, 2, 3]);
   const query = builder.build();
@@ -389,6 +504,24 @@ test.testSync('Select orWhereNotIn numbers', (test, { builder, params }) => {
   );
   test.strictSame(params.build(), [1, 2, 3]);
 });
+
+test.testSync(
+  'Select orWhereNotIn value builder',
+  (test, { builder, params }) => {
+    builder.from('table').orWhereNotIn('f1', b =>
+      b
+        .select('a')
+        .from('table1')
+        .where('f1', '=', 3)
+        .orWhere('f2', '>', 42)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      "f1" NOT IN (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 42]);
+  }
+);
 
 test.testSync('Select whereNotIn/orWhereNotIn', (test, { builder, params }) => {
   builder
@@ -410,12 +543,45 @@ test.testSync('Select whereAny numbers', (test, { builder, params }) => {
   test.strictSame(params.build(), [[1, 2, 3]]);
 });
 
+test.testSync('Select whereAny value builder', (test, { builder, params }) => {
+  builder.from('table').whereAny('f1', b =>
+    b
+      .select('a')
+      .from('table1')
+      .where('f1', '=', 3)
+      .orWhere('f2', '>', 42)
+  );
+  const query = builder.build();
+  const expectedSql = `SELECT * FROM "table" WHERE
+      "f1" = ANY (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2)`;
+  test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+  test.strictSame(params.build(), [3, 42]);
+});
+
 test.testSync('Select orWhereAny numbers', (test, { builder, params }) => {
   builder.from('table').orWhereAny('f1', [1, 2, 3]);
   const query = builder.build();
   test.strictSame(query, 'SELECT * FROM "table" WHERE "f1" = ANY ($1)');
   test.strictSame(params.build(), [[1, 2, 3]]);
 });
+
+test.testSync(
+  'Select orWhereAny value builder',
+  (test, { builder, params }) => {
+    builder.from('table').orWhereAny('f1', b =>
+      b
+        .select('a')
+        .from('table1')
+        .where('f1', '=', 3)
+        .orWhere('f2', '>', 42)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      "f1" = ANY (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 42]);
+  }
+);
 
 test.testSync(
   'Select whereAny/orWhereAny numbers',
@@ -619,6 +785,24 @@ test.testSync('Select whereExists', (test, { builder, params }) => {
   test.strictSame(params.build(), [42, 13]);
 });
 
+test.testSync(
+  'Select whereExists value builder',
+  (test, { builder, params }) => {
+    builder.from('table').whereExists(b =>
+      b
+        .select('a')
+        .from('table1')
+        .where('f1', '=', 3)
+        .orWhere('f2', '>', 42)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      EXISTS (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 42]);
+  }
+);
+
 test.testSync('Select orWhereExists', (test, { builder, params }) => {
   const nested = new SelectBuilder(params).from('table2').where('f1', '=', 42);
   builder
@@ -630,6 +814,24 @@ test.testSync('Select orWhereExists', (test, { builder, params }) => {
   test.strictSame(builder.build(), expectedSql.replace(/\n\s+/g, ' '));
   test.strictSame(params.build(), [13, 42]);
 });
+
+test.testSync(
+  'Select orWhereExists value builder',
+  (test, { builder, params }) => {
+    builder.from('table').orWhereExists(b =>
+      b
+        .select('a')
+        .from('table1')
+        .where('f1', '=', 3)
+        .orWhere('f2', '>', 42)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      EXISTS (SELECT "a" FROM "table1" WHERE "f1" = $1 OR "f2" > $2)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 42]);
+  }
+);
 
 test.testSync(
   'Select whereExists/orWhereExists',
@@ -710,6 +912,33 @@ test.testSync('Select whereBetween', (test, { builder, params }) => {
   test.strictSame(params.build(), [1, 100, 100, 1, 'aaa', 'yyy']);
 });
 
+test.testSync(
+  'Select whereBetween value builder',
+  (test, { builder, params }) => {
+    builder.from('table').whereBetween(
+      'a',
+      b =>
+        b
+          .select('f1')
+          .from('table1')
+          .where('f1', '=', 3)
+          .limit(1),
+      b =>
+        b
+          .select('f2')
+          .from('table2')
+          .where('f2', '>', 42)
+          .limit(1)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      "a" BETWEEN (SELECT "f1" FROM "table1" WHERE "f1" = $1 LIMIT $2) AND
+                  (SELECT "f2" FROM "table2" WHERE "f2" > $3 LIMIT $4)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 1, 42, 1]);
+  }
+);
+
 test.testSync('Select orWhereBetween', (test, { builder, params }) => {
   builder
     .from('table1')
@@ -726,6 +955,33 @@ test.testSync('Select orWhereBetween', (test, { builder, params }) => {
   test.strictSame(params.build(), [1, 100, 100, 1, 'aaa', 'yyy']);
 });
 
+test.testSync(
+  'Select orWhereBetween value builder',
+  (test, { builder, params }) => {
+    builder.from('table').orWhereBetween(
+      'a',
+      b =>
+        b
+          .select('f1')
+          .from('table1')
+          .where('f1', '=', 3)
+          .limit(1),
+      b =>
+        b
+          .select('f2')
+          .from('table2')
+          .where('f2', '>', 42)
+          .limit(1)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      "a" BETWEEN (SELECT "f1" FROM "table1" WHERE "f1" = $1 LIMIT $2) AND
+                  (SELECT "f2" FROM "table2" WHERE "f2" > $3 LIMIT $4)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 1, 42, 1]);
+  }
+);
+
 test.testSync('Select orWhereBetweenNot', (test, { builder, params }) => {
   builder
     .from('table1')
@@ -737,6 +993,60 @@ test.testSync('Select orWhereBetweenNot', (test, { builder, params }) => {
   test.strictSame(builder.build(), expectedSql.replace(/\n\s+/g, ' '));
   test.strictSame(params.build(), [1, 100, 'aaa', 'yyy']);
 });
+
+test.testSync(
+  'Select orWhereNotBetween value builder',
+  (test, { builder, params }) => {
+    builder.from('table').orWhereNotBetween(
+      'a',
+      b =>
+        b
+          .select('f1')
+          .from('table1')
+          .where('f1', '=', 3)
+          .limit(1),
+      b =>
+        b
+          .select('f2')
+          .from('table2')
+          .where('f2', '>', 42)
+          .limit(1)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      "a" NOT BETWEEN (SELECT "f1" FROM "table1" WHERE "f1" = $1 LIMIT $2) AND
+                      (SELECT "f2" FROM "table2" WHERE "f2" > $3 LIMIT $4)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 1, 42, 1]);
+  }
+);
+
+test.testSync(
+  'Select whereNotBetween value builder',
+  (test, { builder, params }) => {
+    builder.from('table').whereNotBetween(
+      'a',
+      b =>
+        b
+          .select('f1')
+          .from('table1')
+          .where('f1', '=', 3)
+          .limit(1),
+      b =>
+        b
+          .select('f2')
+          .from('table2')
+          .where('f2', '>', 42)
+          .limit(1)
+    );
+    const query = builder.build();
+    const expectedSql = `SELECT * FROM "table" WHERE
+      "a" NOT BETWEEN (SELECT "f1" FROM "table1" WHERE "f1" = $1 LIMIT $2) AND
+                      (SELECT "f2" FROM "table2" WHERE "f2" > $3 LIMIT $4)`;
+    test.strictSame(query, expectedSql.replace(/\n\s+/g, ' '));
+    test.strictSame(params.build(), [3, 1, 42, 1]);
+  }
+);
 
 test.testSync('Select where between multiple', (test, { builder, params }) => {
   builder
