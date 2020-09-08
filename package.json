@@ -1,7 +1,7 @@
 {
-  "name": "@metarhia/sql",
+  "name": "metasql",
   "version": "0.1.0",
-  "description": "Metarhia SQL utilities",
+  "description": "Metarhia SQL builder",
   "main": "sql.js",
   "files": [
     "lib/",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/metarhia/sql.git"
+    "url": "git+https://github.com/metarhia/metasql.git"
   },
   "keywords": [
     "SQL",
@@ -25,27 +25,27 @@
   "author": "Denys Otrishko <shishugi@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/metarhia/sql/issues"
+    "url": "https://github.com/metarhia/metasql/issues"
   },
-  "homepage": "https://github.com/metarhia/sql#readme",
+  "homepage": "https://github.com/metarhia/metasql#readme",
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
-    "@metarhia/doc": "^0.6.1",
-    "@typescript-eslint/eslint-plugin": "^3.9.0",
-    "@typescript-eslint/parser": "^3.9.0",
-    "eslint": "^6.8.0",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@metarhia/doc": "^0.7.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "eslint": "^7.8.1",
     "eslint-config-metarhia": "^7.0.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "husky": "^3.1.0",
+    "husky": "^4.3.0",
     "metatests": "^0.7.2",
     "prettier": "^1.19.1",
-    "remark-cli": "^7.0.1",
+    "remark-cli": "^8.0.1",
     "remark-preset-lint-metarhia": "^2.0.1",
-    "remark-validate-links": "^9.2.0",
-    "typescript": "^3.9.7"
+    "remark-validate-links": "^10.0.2",
+    "typescript": "^4.0.2"
   },
   "dependencies": {
     "@metarhia/common": "^2.2.0"
