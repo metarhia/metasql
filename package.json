@@ -1,7 +1,7 @@
 {
-  "name": "@metarhia/sql",
+  "name": "metasql",
   "version": "0.1.0",
-  "description": "Metarhia SQL utilities",
+  "description": "Metarhia SQL builder",
   "main": "sql.js",
   "files": [
     "lib/",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/metarhia/sql.git"
+    "url": "git+https://github.com/metarhia/metasql.git"
   },
   "keywords": [
     "SQL",
@@ -25,9 +25,9 @@
   "author": "Denys Otrishko <shishugi@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/metarhia/sql/issues"
+    "url": "https://github.com/metarhia/metasql/issues"
   },
-  "homepage": "https://github.com/metarhia/sql#readme",
+  "homepage": "https://github.com/metarhia/metasql#readme",
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
