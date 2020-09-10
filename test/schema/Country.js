@@ -1,3 +1,3 @@
 ({
-  name: 'string',
+  name: { type: 'string', unique: true },
 });
