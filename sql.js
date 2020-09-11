@@ -1,10 +1,11 @@
 'use strict';
 
-const { QueryBuilder } = require('./lib/query-builder');
-const { SelectBuilder } = require('./lib/select-builder');
-const { RawBuilder } = require('./lib/raw-builder');
-const { ParamsBuilder } = require('./lib/params-builder');
-const { PostgresParamsBuilder } = require('./lib/pg-params-builder');
+const { QueryBuilder } = require('./lib/query-builder.js');
+const { SelectBuilder } = require('./lib/select-builder.js');
+const { RawBuilder } = require('./lib/raw-builder.js');
+const { ParamsBuilder } = require('./lib/params-builder.js');
+const { PostgresParamsBuilder } = require('./lib/pg-params-builder.js');
+const { generate } = require('./lib/ddl.js');
 
 const pg = handler => {
   const params = new PostgresParamsBuilder();
@@ -19,5 +20,6 @@ module.exports = {
   RawBuilder,
   ParamsBuilder,
   PostgresParamsBuilder,
+  generate,
   pg,
 };
