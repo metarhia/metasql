@@ -1,0 +1,4 @@
+({
+  city: 'City',
+  name: 'string',
+});

@@ -1,0 +1,5 @@
+DROP TABLE "Country";
+DROP TABLE "City";
+
+DROP EXTENSION hstore;
+DROP EXTENSION pg_trgm;
