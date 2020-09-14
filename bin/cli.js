@@ -6,10 +6,12 @@ const metasql = require('..');
 
 const [,, command, version] = process.argv;
 
-if (command === 'g') {
-  const schemaPath = path.join(__dirname, '../application/schemas');
+const schemaPath = path.join(__dirname, '../application/schemas');
+
+if (command === 'c') {
+  metasql.create(schemaPath, schemaPath);
+} else if (command === 'g') {
   metasql.generate(schemaPath);
 } else if (command === 'm') {
-  if (version) console.log(`Migrate to version ${version}`);
-  else console.log(`Migrate to the latest version`);
+  metasql.migrate(schemaPath, parseInt(version, 10));
 }
