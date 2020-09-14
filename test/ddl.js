@@ -4,8 +4,8 @@ const path = require('path');
 const { generate, migrate } = require('..');
 
 const cwd = process.cwd();
-const schemaPath = path.join(cwd, 'test/schema');
-const outputPath = path.join(cwd, 'test/sql');
+const schemaPath = path.join(cwd, 'application/schemas');
+const outputPath = path.join(cwd, 'application/schemas/.migrations');
 
 generate(schemaPath, outputPath);
 migrate(schemaPath);
