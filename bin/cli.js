@@ -4,9 +4,11 @@
 const path = require('path');
 const metasql = require('..');
 
-const [,, arg] = process.argv;
+const [,, command, version] = process.argv;
 
-if (arg === 'g') {
+if (command === 'g') {
   const schemaPath = path.join(__dirname, '../application/schemas');
   metasql.migrate(schemaPath);
+} else if (command === 'm') {
+  console.log(`Migrate to version ${version}`);
 }
