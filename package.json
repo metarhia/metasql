@@ -3,9 +3,13 @@
   "version": "0.1.3",
   "description": "Metarhia SQL builder",
   "main": "sql.js",
+  "bin": {
+    "metasql": "bin/cli.js"
+  },
   "files": [
     "lib/",
-    "typings/"
+    "typings/",
+    "bin/"
   ],
   "scripts": {
     "lint": "eslint . && remark . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
