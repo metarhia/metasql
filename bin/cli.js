@@ -6,7 +6,10 @@ const metasql = require('..');
 
 const [,, command, version] = process.argv;
 
-const schemaPath = path.join(__dirname, '../application/schemas');
+const dir = __dirname.includes('node_modules')
+  ? process.cwd()
+  : path.join(__dirname, '..');
+const schemaPath = path.join(dir, 'application/schemas');
 
 if (command === 'c') {
   metasql.create(schemaPath, schemaPath);
