@@ -1,4 +1,6 @@
 ({
+  Address: 'system registry',
+
   city: 'City',
   street: 'string',
   building: 'string',
