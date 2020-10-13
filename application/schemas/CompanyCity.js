@@ -1,4 +1,6 @@
 ({
+  CompanyCity: 'global relation',
+
   company: 'Company',
   city: 'City',
 
