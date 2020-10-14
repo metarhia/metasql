@@ -10,4 +10,3 @@ typings/
 .env.test
 *.log
 *.tgz
-*.sql
