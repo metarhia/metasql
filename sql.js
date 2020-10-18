@@ -5,7 +5,9 @@ const { SelectBuilder } = require('./lib/select-builder.js');
 const { RawBuilder } = require('./lib/raw-builder.js');
 const { ParamsBuilder } = require('./lib/params-builder.js');
 const { PostgresParamsBuilder } = require('./lib/pg-params-builder.js');
-const { create, generate, migrate } = require('./lib/model-db.js');
+const model = require('./lib/model-db.js');
+const schema = require('./lib/schema-fs.js');
+
 require('./lib/model-pg.js');
 
 const pg = handler => {
@@ -21,8 +23,7 @@ module.exports = {
   RawBuilder,
   ParamsBuilder,
   PostgresParamsBuilder,
-  create,
-  generate,
-  migrate,
   pg,
+  ...model,
+  ...schema,
 };
