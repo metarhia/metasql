@@ -3,23 +3,6 @@
 const { testSync } = require('metatests');
 const schema = require('..');
 
-testSync('Compile struct from string', test => {
-  const src = `({
-    Company: 'global dictionary',
-    name: { type: 'string', unique: true },
-    addresses: { many: 'Address' },
-  });\n`;
-
-  const expected = {
-    Company: 'global dictionary',
-    name: { type: 'string', unique: true },
-    addresses: { many: 'Address' },
-  };
-
-  const struct = schema.compileStruct('Company', src);
-  test.strictEqual(struct, expected);
-});
-
 testSync('Create schema from string', test => {
   const src = `({
     Company: 'global dictionary',
