@@ -1,6 +1,6 @@
 {
   "name": "metasql",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Metarhia SQL builder",
   "main": "sql.js",
   "bin": {
@@ -41,11 +41,11 @@
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@metarhia/doc": "^0.7.0",
-    "@typescript-eslint/eslint-plugin": "^4.4.1",
-    "@typescript-eslint/parser": "^4.4.1",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "eslint": "^7.11.0",
     "eslint-config-metarhia": "^7.0.1",
-    "eslint-config-prettier": "^6.13.0",
+    "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.3.0",
