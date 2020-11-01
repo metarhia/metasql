@@ -1,31 +1,18 @@
 'use strict';
 
-const { testSync } = require('metatests');
-const { pg } = require('..');
+const metatests = require('metatests');
+const { Database } = require('..');
 
-testSync('Must correctly export pg utility', test => {
-  const { builder, params } = pg();
-  builder
-    .select('f1')
-    .from('table1')
-    .where('f2', '=', 42);
-  test.strictEqual(
-    builder.build(),
-    'SELECT "f1" FROM "table1" WHERE "f2" = $1'
-  );
-  test.strictEqual(params.build(), [42]);
-});
+const config = {
+  host: '127.0.0.1',
+  port: 5432,
+  database: 'application',
+  user: 'marcus',
+  password: 'marcus',
+  logger: { db: console.log },
+};
 
-testSync('Must correctly export pg utility with handler', test => {
-  const { builder, params } = pg(builder => {
-    builder
-      .select('f1')
-      .from('table1')
-      .where('f2', '=', 42);
-  });
-  test.strictEqual(
-    builder.build(),
-    'SELECT "f1" FROM "table1" WHERE "f2" = $1'
-  );
-  test.strictEqual(params.build(), [42]);
+metatests.test('Database instance', async test => {
+  const db = new Database(config);
+  test.strictEqual(typeof db, 'object');
 });
