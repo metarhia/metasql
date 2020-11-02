@@ -1,6 +1,6 @@
 {
   "name": "metasql",
-  "version": "0.2.1",
+  "version": "0.3.0-alpha.0",
   "description": "Metarhia SQL builder",
   "main": "sql.js",
   "bin": {
@@ -35,17 +35,17 @@
   "dependencies": {
     "@metarhia/common": "^2.2.0",
     "metavm": "0.1.0",
-    "pg": "^8.4.1"
+    "pg": "^8.4.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@metarhia/doc": "^0.7.0",
-    "@typescript-eslint/eslint-plugin": "^4.5.0",
-    "@typescript-eslint/parser": "^4.5.0",
-    "eslint": "^7.11.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "eslint": "^7.12.1",
     "eslint-config-metarhia": "^7.0.1",
-    "eslint-config-prettier": "^6.14.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.3.0",
@@ -54,6 +54,6 @@
     "remark-cli": "^8.0.1",
     "remark-preset-lint-metarhia": "^2.0.1",
     "remark-validate-links": "^10.0.2",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.5"
   }
 }
