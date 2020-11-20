@@ -8,10 +8,7 @@
     { name: 'Timur Shemsedinov', email: 'timur.shemsedinov@gmail.com' },
   ],
 
-  extensions: [
-    'hstore',
-    'pg_trgm',
-  ],
+  extensions: ['hstore', 'pg_trgm'],
 
   connection: {
     host: '127.0.0.1',

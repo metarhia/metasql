@@ -12,7 +12,7 @@ const config = {
   logger: { db: console.log },
 };
 
-metatests.test('Database instance', async test => {
+metatests.test('Database instance', async (test) => {
   const db = new Database(config);
   test.strictEqual(typeof db, 'object');
 });

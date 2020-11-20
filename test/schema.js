@@ -3,7 +3,7 @@
 const { testSync } = require('metatests');
 const schema = require('..');
 
-testSync('Create schema from string', test => {
+testSync('Create schema from string', (test) => {
   const src = `({
     Company: 'global dictionary',
     name: { type: 'string', unique: true },
@@ -26,7 +26,7 @@ testSync('Create schema from string', test => {
   test.strictEqual(entity, expected);
 });
 
-testSync('Create schema from struct', test => {
+testSync('Create schema from struct', (test) => {
   const raw = {
     Company: 'global dictionary',
     name: { type: 'string', unique: true },
@@ -49,7 +49,7 @@ testSync('Create schema from struct', test => {
   test.strictEqual(entity, expected);
 });
 
-testSync('Create model from struct', test => {
+testSync('Create model from struct', (test) => {
   const database = {
     name: 'example',
     description: 'Example database schema',
@@ -72,17 +72,22 @@ testSync('Create model from struct', test => {
       driver: 'pg',
     },
     types: { ...schema.dbms.pg.types },
-    entities: new Map([['Company', {
-      name: 'Company',
-      scope: 'global',
-      kind: 'dictionary',
-      fields: { name: { type: 'string', unique: true, required: true } },
-      indexes: { addresses: { many: 'Address' } },
-      validate: null,
-      format: null,
-      parse: null,
-      serialize: null,
-    }]]),
+    entities: new Map([
+      [
+        'Company',
+        {
+          name: 'Company',
+          scope: 'global',
+          kind: 'dictionary',
+          fields: { name: { type: 'string', unique: true, required: true } },
+          indexes: { addresses: { many: 'Address' } },
+          validate: null,
+          format: null,
+          parse: null,
+          serialize: null,
+        },
+      ],
+    ]),
     order: new Set(['Company']),
   };
 
@@ -90,7 +95,7 @@ testSync('Create model from struct', test => {
   test.strictEqual(model, expected);
 });
 
-testSync('Export schema to interface', test => {
+testSync('Export schema to interface', (test) => {
   const raw = {
     Company: 'global dictionary',
     name: { type: 'string', unique: true },

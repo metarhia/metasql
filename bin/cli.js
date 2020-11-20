@@ -4,7 +4,7 @@
 const path = require('path');
 const metasql = require('..');
 
-const [,, command, version] = process.argv;
+const [, , command, version] = process.argv;
 
 const dir = __dirname.includes('node_modules')
   ? process.cwd()
