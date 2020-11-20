@@ -1,9 +1,6 @@
 {
   "files": ["sql.js"],
   "minHeaderLevel": 2,
-  "customLinks": {
-    "ParamsBuilder": "../lib/params-builder.js"
-  },
   "header": "# API Documentation\n",
   "outputDir": "doc/"
 }
