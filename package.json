@@ -1,7 +1,7 @@
 {
   "name": "metasql",
   "version": "0.3.0-alpha.1",
-  "description": "Metarhia SQL builder",
+  "description": "MetaSQL Database schema generator, migrations and query builder for Metarhia",
   "main": "sql.js",
   "bin": {
     "metasql": "bin/cli.js"
@@ -23,8 +23,12 @@
     "url": "git+https://github.com/metarhia/metasql.git"
   },
   "keywords": [
-    "SQL",
-    "Metarhia"
+    "sql",
+    "metarhia",
+    "query builder",
+    "schema",
+    "migrations",
+    "database"
   ],
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
   "license": "MIT",
