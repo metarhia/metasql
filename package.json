@@ -1,6 +1,6 @@
 {
   "name": "metasql",
-  "version": "0.3.0-alpha.1",
+  "version": "0.3.0-alpha.2",
   "description": "MetaSQL Database schema generator, migrations and query builder for Metarhia",
   "main": "sql.js",
   "bin": {
