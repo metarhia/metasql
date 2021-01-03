@@ -38,7 +38,7 @@
   "homepage": "https://github.com/metarhia/metasql#readme",
   "dependencies": {
     "@metarhia/common": "^2.2.0",
-    "metavm": "0.1.0",
+    "metavm": "0.2.0",
     "pg": "^8.5.1"
   },
   "devDependencies": {
