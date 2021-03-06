@@ -3,6 +3,7 @@
   "version": "0.3.0-alpha.3",
   "description": "MetaSQL Database schema generator, migrations and query builder for Metarhia",
   "main": "sql.js",
+  "types": "types/metasql.d.ts",
   "bin": {
     "metasql": "bin/cli.js"
   },
