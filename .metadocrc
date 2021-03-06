@@ -1,6 +1,0 @@
-{
-  "files": ["sql.js"],
-  "minHeaderLevel": 2,
-  "header": "# API Documentation\n",
-  "outputDir": "doc/"
-}
