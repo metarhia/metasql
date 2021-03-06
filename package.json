@@ -3,6 +3,7 @@
   "version": "0.3.0-alpha.3",
   "description": "MetaSQL Database schema generator, migrations and query builder for Metarhia",
   "main": "sql.js",
+  "types": "types/metasql.d.ts",
   "bin": {
     "metasql": "bin/cli.js"
   },
@@ -15,8 +16,8 @@
     "lint": "eslint . && remark . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
     "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
     "types": "tsc -p types/tsconfig.json",
-    "test": "eslint . && metatests test/",
-    "doc": "metadoc -c .metadocrc && npm run fmt"
+    "doc": "metadoc -c .metadocrc && npm run fmt",
+    "test": "npm run lint && npm run types && metatests test/"
   },
   "repository": {
     "type": "git",
