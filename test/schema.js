@@ -1,53 +1,8 @@
 'use strict';
 
 const { testSync } = require('metatests');
-const schema = require('..');
-
-testSync('Create schema from string', (test) => {
-  const src = `({
-    Company: 'global dictionary',
-    name: { type: 'string', unique: true },
-    addresses: { many: 'Address' },
-  });\n`;
-
-  const expected = {
-    name: 'Company',
-    scope: 'global',
-    kind: 'dictionary',
-    fields: { name: { type: 'string', unique: true, required: true } },
-    indexes: { addresses: { many: 'Address' } },
-    validate: null,
-    format: null,
-    parse: null,
-    serialize: null,
-  };
-
-  const entity = schema.createSchema('Company', src);
-  test.strictEqual(entity, expected);
-});
-
-testSync('Create schema from struct', (test) => {
-  const raw = {
-    Company: 'global dictionary',
-    name: { type: 'string', unique: true },
-    addresses: { many: 'Address' },
-  };
-
-  const expected = {
-    name: 'Company',
-    scope: 'global',
-    kind: 'dictionary',
-    fields: { name: { type: 'string', unique: true, required: true } },
-    indexes: { addresses: { many: 'Address' } },
-    validate: null,
-    format: null,
-    parse: null,
-    serialize: null,
-  };
-
-  const entity = new schema.Schema('Company', raw);
-  test.strictEqual(entity, expected);
-});
+const { Schema } = require('metaschema');
+const metasql = require('..');
 
 testSync('Create model from struct', (test) => {
   const database = {
@@ -56,7 +11,7 @@ testSync('Create model from struct', (test) => {
     version: 3,
     driver: 'pg',
   };
-  const types = { ...schema.dbms.pg.types };
+  const types = { ...metasql.dbms.pg.types };
   const entities = new Map();
   entities.set('Company', {
     Company: 'global dictionary',
@@ -71,7 +26,7 @@ testSync('Create model from struct', (test) => {
       version: 3,
       driver: 'pg',
     },
-    types: { ...schema.dbms.pg.types },
+    types: { ...metasql.dbms.pg.types },
     entities: new Map([
       [
         'Company',
@@ -91,7 +46,7 @@ testSync('Create model from struct', (test) => {
     order: new Set(['Company']),
   };
 
-  const model = new schema.DomainModel(database, types, entities);
+  const model = new metasql.DomainModel(database, types, entities);
   test.strictEqual(model, expected);
 });
 
@@ -106,7 +61,7 @@ testSync('Export schema to interface', (test) => {
   companyId: number;
   name: string;\n}`;
 
-  const entity = new schema.Schema('Company', raw);
-  const iface = schema.toInterface('Company', entity);
+  const entity = new Schema('Company', raw);
+  const iface = metasql.toInterface('Company', entity);
   test.strictEqual(iface, expected);
 });
