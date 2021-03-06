@@ -16,7 +16,6 @@
     "lint": "eslint . && remark . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
     "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
     "types": "tsc -p types/tsconfig.json",
-    "doc": "metadoc -c .metadocrc && npm run fmt",
     "test": "npm run lint && npm run types && metatests test/"
   },
   "repository": {
