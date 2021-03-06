@@ -10,8 +10,8 @@
 
 [Metahria](https://github.com/metarhia) technology stack relational database
 access layer library for DDL generation from
-[metaschema](https://github.com/metarhia/metaschema), data validation, migrations
-auto generation, queries and introspection.
+[metaschema](https://github.com/metarhia/metaschema), data validation,
+migrations auto generation, queries and introspection.
 
 ## Contributors
 
