@@ -2,7 +2,7 @@
   "name": "metasql",
   "version": "0.3.0-alpha.3",
   "description": "MetaSQL Database schema generator, migrations and query builder for Metarhia",
-  "main": "sql.js",
+  "main": "metasql.js",
   "types": "types/metasql.d.ts",
   "bin": {
     "metasql": "bin/cli.js"
@@ -37,8 +37,8 @@
   },
   "homepage": "https://github.com/metarhia/metasql#readme",
   "dependencies": {
-    "@metarhia/common": "^2.2.0",
-    "metavm": "1.0.0",
+    "metaschema": "^1.0.1",
+    "metavm": "^1.0.0",
     "pg": "^8.5.1"
   },
   "devDependencies": {
