@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.0.1][] - 2021-04-04
+
 - Fixed field names quotation
 - Update dependencies
 
@@ -19,6 +21,7 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/metarhia/metasql/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/metarhia/metasql/compare/metarhia-sql...v1.0.0
 [metarhia-sql]: https://github.com/metarhia/metasql/releases/tag/metarhia-sql
