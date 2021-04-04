@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+- Fixed field names quotation
+- Update dependencies
+
 ## [1.0.0][] - 2021-03-06
 
 - Simple query builder instead of SQL clause generator
