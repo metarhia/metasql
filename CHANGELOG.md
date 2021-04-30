@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- New API methods Database.row/col/scalar
+
 ## [1.0.1][] - 2021-04-04
 
 - Fixed field names quotation
