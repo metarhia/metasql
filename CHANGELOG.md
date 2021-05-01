@@ -2,7 +2,11 @@
 
 ## [Unreleased][unreleased]
 
-- New API methods Database.row/col/scalar
+- New API methods for Database:
+  - async row(table, fields, conditions): Object
+  - async scalar(table, field, conditions): ScalarValue
+  - async col(table, field, conditions): Array
+  - async dict(table, fields, conditions): Object
 
 ## [1.0.1][] - 2021-04-04
 

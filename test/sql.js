@@ -56,3 +56,10 @@ metatests.test('Database.col', async (test) => {
   const res = await db.col('City', ['name']);
   test.strictEqual(res.constructor.name, 'Array');
 });
+
+metatests.test('Database.dict', async (test) => {
+  const res = await db.dict('City', ['name', 'countryId']);
+  test.strictEqual(typeof res, 'object');
+  const key = 'Kiev';
+  test.strictEqual(res[key], '1');
+});
