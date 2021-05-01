@@ -4,23 +4,18 @@ on: pull_request
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        node:
-          - 12
-          - 14
-          - 15
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
+    runs-on: ubuntu-latest
+    container: node:14-alpine
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
       - uses: actions/cache@v2
@@ -30,4 +25,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: npm ci
+      - run: apk add --no-cache postgresql-client git
+      - run: PGPASSWORD=postgres psql -h postgres -U postgres -f application/db/install.sql
+      - run: PGPASSWORD=marcus   psql -h postgres -d application -U marcus -f application/db/structure.sql
+      - run: PGPASSWORD=marcus   psql -h postgres -d application -U marcus -f application/db/data.sql
       - run: npm test
+        env:
+          POSTGRES_HOST: postgres
