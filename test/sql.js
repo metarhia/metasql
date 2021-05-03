@@ -28,9 +28,16 @@ metatests.test('Database.query', async (test) => {
 });
 
 metatests.test('Database.select', async (test) => {
-  const res = await db.select('City', ['*'], { cityId: 3 });
-  test.strictEqual(res.length, 1);
-  test.strictEqual(res[0], { cityId: '3', name: 'Kiev', countryId: '1' });
+  const res1 = await db.select('City', ['*'], { cityId: 3 });
+  test.strictEqual(res1.length, 1);
+  test.strictEqual(res1[0], { cityId: '3', name: 'Kiev', countryId: '1' });
+  const res2 = await db.select('City', { cityId: 3 });
+  test.strictEqual(res2.length, 1);
+  test.strictEqual(res2[0], { cityId: '3', name: 'Kiev', countryId: '1' });
+  const res3 = await db.select('City');
+  const { cityId, name } = res3[0];
+  test.strictEqual(cityId, '1');
+  test.strictEqual(name, 'Beijing');
 });
 
 metatests.test('Database.insert/update/delete', async (test) => {
