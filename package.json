@@ -13,7 +13,7 @@
     "bin/"
   ],
   "scripts": {
-    "lint": "eslint . && remark . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
+    "lint": "eslint . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
     "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
     "types": "tsc -p types/tsconfig.json",
     "test": "npm run lint && npm run types && metatests test/"
@@ -42,22 +42,14 @@
     "pg": "^8.5.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^12.1.1",
-    "@commitlint/config-conventional": "^12.1.1",
-    "@metarhia/doc": "^0.7.0",
-    "@typescript-eslint/eslint-plugin": "^4.20.0",
-    "@typescript-eslint/parser": "^4.20.0",
-    "eslint": "^7.23.0",
+    "@types/node": "^15.0.1",
+    "eslint": "^7.24.0",
     "eslint-config-metarhia": "^7.0.1",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "husky": "^6.0.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "metatests": "^0.7.2",
     "prettier": "^2.2.1",
-    "remark-cli": "^9.0.0",
-    "remark-preset-lint-metarhia": "^2.0.1",
-    "remark-validate-links": "^10.0.4",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.4"
   }
 }
