@@ -1,7 +1,0 @@
-{
-  "plugins": [
-    "remark-preset-lint-metarhia",
-    "remark-validate-links",
-    ["remark-lint-emphasis-marker", "_"]
-  ]
-}
