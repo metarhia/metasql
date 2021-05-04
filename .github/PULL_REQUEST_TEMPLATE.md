@@ -9,4 +9,3 @@ Change [ ] to [x] for completed items.
 - [ ] code is properly formatted (`npm run fmt`)
 - [ ] description of changes is added in CHANGELOG.md
 - [ ] update .d.ts typings
-
