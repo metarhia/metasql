@@ -7,6 +7,7 @@
   - async scalar(table, field, conditions): ScalarValue
   - async col(table, field, conditions): Array
   - async dict(table, fields, conditions): Object
+- Update metaschema to v1.1.0
 
 ## [1.0.1][] - 2021-04-04
 
