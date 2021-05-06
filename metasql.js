@@ -2,8 +2,7 @@
 
 const database = require('./lib/database.js');
 const model = require('./lib/model-db.js');
-const schema = require('./lib/schema.js');
 
 require('./lib/model-pg.js');
 
-module.exports = { ...database, ...model, ...schema };
+module.exports = { ...database, ...model };
