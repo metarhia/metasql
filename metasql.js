@@ -1,8 +1,8 @@
 'use strict';
 
 const database = require('./lib/database.js');
-const model = require('./lib/model-db.js');
+const dbms = require('./lib/dbms.js');
 
-require('./lib/model-pg.js');
+require('./lib/pg.js');
 
-module.exports = { ...database, ...model };
+module.exports = { ...database, ...dbms };
