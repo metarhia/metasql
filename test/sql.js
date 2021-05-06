@@ -17,6 +17,7 @@ const db = new Database(config);
 metatests.test('Open database', async (test) => {
   test.strictEqual(db.constructor.name, 'Database');
   test.strictEqual(db.pool.constructor.name, 'BoundPool');
+  test.end();
 });
 
 metatests.test('Database.query', async (test) => {
@@ -25,6 +26,7 @@ metatests.test('Database.query', async (test) => {
   test.strictEqual(res.rows.constructor.name, 'Array');
   test.strictEqual(res.rows.length, 1);
   test.strictEqual(res.rows[0].name, 'Kiev');
+  test.end();
 });
 
 metatests.test('Database.select', async (test) => {
@@ -38,6 +40,7 @@ metatests.test('Database.select', async (test) => {
   const { cityId, name } = res3[0];
   test.strictEqual(cityId, '1');
   test.strictEqual(name, 'Beijing');
+  test.end();
 });
 
 metatests.test('Database.insert/update/delete', async (test) => {
@@ -47,21 +50,25 @@ metatests.test('Database.insert/update/delete', async (test) => {
   test.strictEqual(res2.rowCount, 1);
   const res3 = await db.delete('City', { name: 'ODESSA' });
   test.strictEqual(res3.rowCount, 1);
+  test.end();
 });
 
 metatests.test('Database.row', async (test) => {
   const res = await db.row('City', ['*'], { name: 'Kiev' });
   test.strictEqual(res, { cityId: '3', name: 'Kiev', countryId: '1' });
+  test.end();
 });
 
 metatests.test('Database.scalar', async (test) => {
   const res = await db.scalar('City', ['name'], { name: 'Kiev' });
   test.strictEqual(res, 'Kiev');
+  test.end();
 });
 
 metatests.test('Database.col', async (test) => {
   const res = await db.col('City', ['name']);
   test.strictEqual(res.constructor.name, 'Array');
+  test.end();
 });
 
 metatests.test('Database.dict', async (test) => {
@@ -69,4 +76,5 @@ metatests.test('Database.dict', async (test) => {
   test.strictEqual(typeof res, 'object');
   const key = 'Kiev';
   test.strictEqual(res[key], '1');
+  test.end();
 });
