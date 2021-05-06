@@ -38,8 +38,7 @@ ALTER TABLE "Address" ADD CONSTRAINT "fkAddressCity" FOREIGN KEY ("cityId") REFE
 CREATE TABLE "SystemUser" (
   "systemUserId" bigint generated always as identity,
   "login" varchar(30) NOT NULL,
-  "password" varchar NOT NULL,
-  "fullName" varchar(60) NOT NULL
+  "password" varchar NOT NULL
 );
 
 ALTER TABLE "SystemUser" ADD CONSTRAINT "pkSystemUser" PRIMARY KEY ("systemUser");

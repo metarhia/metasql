@@ -29,7 +29,6 @@ interface SystemUser {
   systemUserId: number;
   login: string;
   password: string;
-  fullName: string;
 }
 
 interface Changes {
