@@ -8,6 +8,7 @@
   - async col(table, field, conditions): Array
   - async dict(table, fields, conditions): Object
 - Update metaschema to v1.1.0
+- Use metaschema Model and Schema classes
 
 ## [1.0.1][] - 2021-04-04
 
