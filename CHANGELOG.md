@@ -9,6 +9,7 @@
   - async dict(table, fields, conditions): Object
 - Update metaschema to v1.1.0
 - Use metaschema Model and Schema classes
+- Support script generation with field groups
 
 ## [1.0.1][] - 2021-04-04
 
