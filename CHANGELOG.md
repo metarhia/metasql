@@ -2,14 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+## [1.1.0][] - 2021-05-07
+
+- Use metaschema Model and Schema classes
+- Support script generation with field groups
+- Update metaschema to v1.1.0
 - New API methods for Database:
   - async row(table, fields, conditions): Object
   - async scalar(table, field, conditions): ScalarValue
   - async col(table, field, conditions): Array
   - async dict(table, fields, conditions): Object
-- Update metaschema to v1.1.0
-- Use metaschema Model and Schema classes
-- Support script generation with field groups
 
 ## [1.0.1][] - 2021-04-04
 
@@ -30,7 +32,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.0.1...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/metarhia/metasql/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/metarhia/metasql/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/metarhia/metasql/compare/metarhia-sql...v1.0.0
 [metarhia-sql]: https://github.com/metarhia/metasql/releases/tag/metarhia-sql
