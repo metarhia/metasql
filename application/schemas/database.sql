@@ -20,12 +20,12 @@ CREATE TABLE "City" (
   "name" varchar NOT NULL,
   "location" geometry(Point, 4326),
   "population" integer NOT NULL DEFAULT 0,
-  "includeId" bigint NOT NULL
+  "changesIncludeId" bigint NOT NULL
 );
 
 ALTER TABLE "City" ADD CONSTRAINT "pkCity" PRIMARY KEY ("city");
 ALTER TABLE "City" ADD CONSTRAINT "fkCityCountry" FOREIGN KEY ("countryId") REFERENCES "Country" ("countryId");
-ALTER TABLE "City" ADD CONSTRAINT "fkCityInclude" FOREIGN KEY ("includeId") REFERENCES "Changes" ("changesId");
+ALTER TABLE "City" ADD CONSTRAINT "fkCityChangesInclude" FOREIGN KEY ("changesIncludeId") REFERENCES "Changes" ("changesId");
 
 CREATE TABLE "Address" (
   "cityId" bigint NOT NULL,
@@ -41,23 +41,22 @@ CREATE TABLE "SystemUser" (
   "systemUserId" bigint generated always as identity,
   "login" varchar(30) NOT NULL,
   "password" varchar NOT NULL,
-  "givenName" varchar,
-  "middleName" varchar,
-  "surname" varchar,
+  "fullNameGiven" varchar,
+  "fullNameMiddle" varchar,
+  "fullNameSurname" varchar,
   "birthDate" varchar,
   "birthPlace" varchar,
-  "countryId" bigint,
-  "provinceId" bigint,
-  "cityId" bigint,
-  "address1" varchar,
-  "address2" varchar,
-  "zipCode" varchar
+  "addressCountryId" bigint,
+  "addressProvinceId" bigint,
+  "addressCityId" bigint,
+  "addressLine" varchar,
+  "addressZip" varchar
 );
 
 ALTER TABLE "SystemUser" ADD CONSTRAINT "pkSystemUser" PRIMARY KEY ("systemUser");
-ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserCountry" FOREIGN KEY ("countryId") REFERENCES "Country" ("countryId");
-ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserProvince" FOREIGN KEY ("provinceId") REFERENCES "Province" ("provinceId");
-ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserCity" FOREIGN KEY ("cityId") REFERENCES "City" ("cityId");
+ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserAddressCountry" FOREIGN KEY ("addressCountryId") REFERENCES "Country" ("countryId");
+ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserAddressProvince" FOREIGN KEY ("addressProvinceId") REFERENCES "Province" ("provinceId");
+ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserAddressCity" FOREIGN KEY ("addressCityId") REFERENCES "City" ("cityId");
 
 CREATE TABLE "Changes" (
   "changesId" bigint generated always as identity,

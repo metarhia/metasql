@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Field group name concatenation with field name
+
 ## [1.1.0][] - 2021-05-07
 
 - Use metaschema Model and Schema classes
