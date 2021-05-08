@@ -5,21 +5,21 @@
   password: { type: 'string', length: { min: 10 } },
 
   fullName: {
-    given: { type: 'string', required: false },
-    middle: { type: 'string', required: false },
-    surname: { type: 'string', required: false },
+    given: '?string',
+    middle: '?string',
+    surname: '?string',
   },
 
   birth: {
-    date: { type: 'string', required: false },
-    place: { type: 'string', required: false },
+    date: '?string',
+    place: '?string',
   },
 
   address: {
-    country: { type: 'Country', required: false },
-    province: { type: 'Province', required: false },
-    city: { type: 'City', required: false },
-    line: { type: 'string', required: false },
-    zip: { type: 'string', required: false },
+    country: '?Country',
+    province: '?Province',
+    city: '?City',
+    line: '?string',
+    zip: '?string',
   },
 });
