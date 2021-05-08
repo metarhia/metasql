@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.1.1][] - 2021-05-08
+
 - Field group name concatenation with field name
 - Support optional shorthand and nested json schema
 
@@ -35,7 +37,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.0...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/metarhia/metasql/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/metarhia/metasql/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/metarhia/metasql/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/metarhia/metasql/compare/metarhia-sql...v1.0.0
