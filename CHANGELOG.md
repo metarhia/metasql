@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Field group name concatenation with field name
+- Support optional shorthand and nested json schema
 
 ## [1.1.0][] - 2021-05-07
 
