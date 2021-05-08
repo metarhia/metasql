@@ -1,6 +1,6 @@
 {
   "name": "metasql",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "MetaSQL Database schema generator, migrations and query builder for Metarhia",
   "main": "metasql.js",
   "types": "types/metasql.d.ts",
