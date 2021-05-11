@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Query.limit(count: number)
+- Query.order(fields: string | Array<string>)
 
 ## [1.1.1][] - 2021-05-08
 
