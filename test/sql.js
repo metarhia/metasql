@@ -56,6 +56,18 @@ metatests.test('Query.limit/offset', async (test) => {
   test.end();
 });
 
+metatests.test('Query.order/desc', async (test) => {
+  const res1 = await db.select('City').order('name');
+  test.strictEqual(res1[0].name, 'Beijing');
+  const res2 = await db.select('City').desc('name');
+  test.strictEqual(res2[0].name, 'Wuhan');
+  const res3 = await db.select('City').order('name').desc('name');
+  test.strictEqual(res3[0].name, 'Wuhan');
+  const res4 = await db.select('City').desc('name').order('name');
+  test.strictEqual(res4[0].name, 'Beijing');
+  test.end();
+});
+
 metatests.test('Database.insert/update/delete', async (test) => {
   const res1 = await db.insert('City', { name: 'Odessa', countryId: 1 });
   test.strictEqual(res1.rowCount, 1);
