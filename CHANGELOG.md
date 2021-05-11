@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Query.limit(count: number)
+
 ## [1.1.1][] - 2021-05-08
 
 - Field group name concatenation with field name
