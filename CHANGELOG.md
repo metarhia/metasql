@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Query.limit(count: number)
+- Query.offset(count: number)
 - Query.order(fields: string | Array<string>)
 - Query.desc(fields: string | Array<string>)
 
