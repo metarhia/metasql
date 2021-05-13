@@ -1,46 +1,25 @@
-CREATE TABLE "Planet" (
-  "planetId" bigint generated always as identity,
+CREATE TABLE "Application" (
+  "applicationId" bigint generated always as identity,
   "name" varchar NOT NULL
 );
 
-ALTER TABLE "Planet" ADD CONSTRAINT "pkPlanet" PRIMARY KEY ("planet");
+ALTER TABLE "Application" ADD CONSTRAINT "pkApplication" PRIMARY KEY ("application");
 
-CREATE TABLE "Country" (
-  "countryId" bigint generated always as identity,
-  "planetId" bigint NOT NULL,
-  "name" varchar NOT NULL
-);
-
-ALTER TABLE "Country" ADD CONSTRAINT "pkCountry" PRIMARY KEY ("country");
-ALTER TABLE "Country" ADD CONSTRAINT "fkCountryPlanet" FOREIGN KEY ("planetId") REFERENCES "Planet" ("planetId") ON DELETE RESTRICT ON UPDATE CASCADE;
-
-CREATE TABLE "City" (
-  "cityId" bigint generated always as identity,
-  "countryId" bigint NOT NULL,
+CREATE TABLE "Unit" (
+  "unitId" bigint generated always as identity,
   "name" varchar NOT NULL,
-  "location" geometry(Point, 4326),
-  "population" integer NOT NULL DEFAULT 0,
-  "changesIncludeId" bigint NOT NULL
+  "applicationId" bigint NOT NULL
 );
 
-ALTER TABLE "City" ADD CONSTRAINT "pkCity" PRIMARY KEY ("city");
-ALTER TABLE "City" ADD CONSTRAINT "fkCityCountry" FOREIGN KEY ("countryId") REFERENCES "Country" ("countryId");
-ALTER TABLE "City" ADD CONSTRAINT "fkCityChangesInclude" FOREIGN KEY ("changesIncludeId") REFERENCES "Changes" ("changesId");
+ALTER TABLE "Unit" ADD CONSTRAINT "pkUnit" PRIMARY KEY ("unit");
+ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("applicationId");
 
-CREATE TABLE "Address" (
-  "cityId" bigint NOT NULL,
-  "street" varchar NOT NULL,
-  "building" varchar NOT NULL,
-  "apartment" varchar NOT NULL
-);
-
-ALTER TABLE "Address" ADD CONSTRAINT "pkAddress" PRIMARY KEY ("cityId", "street", "building", "apartment");
-ALTER TABLE "Address" ADD CONSTRAINT "fkAddressCity" FOREIGN KEY ("cityId") REFERENCES "City" ("cityId");
-
-CREATE TABLE "SystemUser" (
-  "systemUserId" bigint generated always as identity,
-  "login" varchar(30) NOT NULL,
+CREATE TABLE "Account" (
+  "accountId" bigint generated always as identity,
+  "login" varchar NOT NULL,
   "password" varchar NOT NULL,
+  "blocked" boolean NOT NULL DEFAULT false,
+  "unitId" bigint NOT NULL,
   "fullNameGiven" varchar,
   "fullNameMiddle" varchar,
   "fullNameSurname" varchar,
@@ -49,92 +28,125 @@ CREATE TABLE "SystemUser" (
   "addressCountryId" bigint,
   "addressProvinceId" bigint,
   "addressCityId" bigint,
-  "addressLine" varchar,
-  "addressZip" varchar
+  "addressAddress1" varchar,
+  "addressAddress2" varchar,
+  "addressZipCode" varchar
 );
 
-ALTER TABLE "SystemUser" ADD CONSTRAINT "pkSystemUser" PRIMARY KEY ("systemUser");
-ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserAddressCountry" FOREIGN KEY ("addressCountryId") REFERENCES "Country" ("countryId");
-ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserAddressProvince" FOREIGN KEY ("addressProvinceId") REFERENCES "Province" ("provinceId");
-ALTER TABLE "SystemUser" ADD CONSTRAINT "fkSystemUserAddressCity" FOREIGN KEY ("addressCityId") REFERENCES "City" ("cityId");
+ALTER TABLE "Account" ADD CONSTRAINT "pkAccount" PRIMARY KEY ("account");
+ALTER TABLE "Account" ADD CONSTRAINT "fkAccountUnit" FOREIGN KEY ("unitId") REFERENCES "Unit" ("unitId");
+ALTER TABLE "Account" ADD CONSTRAINT "fkAccountAddressCountry" FOREIGN KEY ("addressCountryId") REFERENCES "Country" ("countryId");
+ALTER TABLE "Account" ADD CONSTRAINT "fkAccountAddressProvince" FOREIGN KEY ("addressProvinceId") REFERENCES "Province" ("provinceId");
+ALTER TABLE "Account" ADD CONSTRAINT "fkAccountAddressCity" FOREIGN KEY ("addressCityId") REFERENCES "City" ("cityId");
 
-CREATE TABLE "Changes" (
-  "changesId" bigint generated always as identity,
-  "creatorId" bigint NOT NULL,
-  "authorId" bigint NOT NULL,
-  "createTime" timestamp with time zone NOT NULL,
-  "updateTime" timestamp with time zone NOT NULL
+CREATE TABLE "AccountRole" (
+  "accountId" bigint NOT NULL,
+  "roleId" bigint NOT NULL
 );
 
-ALTER TABLE "Changes" ADD CONSTRAINT "pkChanges" PRIMARY KEY ("changes");
-ALTER TABLE "Changes" ADD CONSTRAINT "fkChangesCreator" FOREIGN KEY ("creatorId") REFERENCES "SystemUser" ("systemUserId");
-ALTER TABLE "Changes" ADD CONSTRAINT "fkChangesAuthor" FOREIGN KEY ("authorId") REFERENCES "SystemUser" ("systemUserId");
+ALTER TABLE "AccountRole" ADD CONSTRAINT "pkAccountRole" PRIMARY KEY ("accountId", "roleId");
+ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId");
+ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleRole" FOREIGN KEY ("roleId") REFERENCES "Role" ("roleId");
 
-CREATE TABLE "Company" (
-  "companyId" bigint generated always as identity,
-  "name" varchar NOT NULL
+CREATE TABLE "Catalog" (
+  "catalogId" bigint generated always as identity,
+  "name" varchar NOT NULL,
+  "parentId" bigint,
+  "applicationId" bigint NOT NULL
 );
 
-ALTER TABLE "Company" ADD CONSTRAINT "pkCompany" PRIMARY KEY ("company");
+ALTER TABLE "Catalog" ADD CONSTRAINT "pkCatalog" PRIMARY KEY ("catalog");
+ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogParent" FOREIGN KEY ("parentId") REFERENCES "Catalog" ("catalogId");
+ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("applicationId");
 
-CREATE TABLE "CompanyAddress" (
-  "companyId" bigint NOT NULL,
-  "addressId" bigint NOT NULL
+CREATE TABLE "CatalogIdentifier" (
+  "catalogId" bigint NOT NULL,
+  "identifierId" bigint NOT NULL
 );
 
-ALTER TABLE "CompanyAddress" ADD CONSTRAINT "pkCompanyAddress" PRIMARY KEY ("companyId", "addressId");
-ALTER TABLE "CompanyAddress" ADD CONSTRAINT "fkCompanyAddressCompany" FOREIGN KEY ("companyId") REFERENCES "Company" ("companyId");
-ALTER TABLE "CompanyAddress" ADD CONSTRAINT "fkCompanyAddressAddress" FOREIGN KEY ("addressId") REFERENCES "Address" ("addressId");
+ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "pkCatalogIdentifier" PRIMARY KEY ("catalogId", "identifierId");
+ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierCatalog" FOREIGN KEY ("catalogId") REFERENCES "Catalog" ("catalogId");
+ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("identifierId");
 
-CREATE TABLE "CompanyCity" (
-  "companyId" bigint NOT NULL,
-  "cityId" bigint NOT NULL
+CREATE TABLE "Category" (
+  "categoryId" bigint generated always as identity,
+  "name" varchar NOT NULL,
+  "kind" string NOT NULL,
+  "scope" string NOT NULL DEFAULT application,
+  "store" string NOT NULL DEFAULT persistent,
+  "allow" string NOT NULL DEFAULT write,
+  "applicationId" bigint NOT NULL
 );
 
-ALTER TABLE "CompanyCity" ADD CONSTRAINT "pkCompanyCity" PRIMARY KEY ("companyId", "cityId");
-ALTER TABLE "CompanyCity" ADD CONSTRAINT "fkCompanyCityCompany" FOREIGN KEY ("companyId") REFERENCES "Company" ("companyId");
-ALTER TABLE "CompanyCity" ADD CONSTRAINT "fkCompanyCityCity" FOREIGN KEY ("cityId") REFERENCES "City" ("cityId");
+ALTER TABLE "Category" ADD CONSTRAINT "pkCategory" PRIMARY KEY ("category");
+ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("applicationId");
 
-CREATE TABLE "District" (
-  "districtId" bigint generated always as identity,
-  "cityId" bigint NOT NULL,
-  "name" varchar NOT NULL
+CREATE TABLE "Identifier" (
+  "identifierId" bigint generated always as identity,
+  "categoryId" bigint NOT NULL,
+  "storage" string NOT NULL,
+  "status" string NOT NULL,
+  "creation" timestamp with time zone NOT NULL,
+  "change" timestamp with time zone NOT NULL,
+  "lock" boolean NOT NULL DEFAULT false,
+  "version" integer NOT NULL DEFAULT 0,
+  "hashsum" varchar NOT NULL
 );
 
-ALTER TABLE "District" ADD CONSTRAINT "pkDistrict" PRIMARY KEY ("district");
-ALTER TABLE "District" ADD CONSTRAINT "fkDistrictCity" FOREIGN KEY ("cityId") REFERENCES "City" ("cityId");
+ALTER TABLE "Identifier" ADD CONSTRAINT "pkIdentifier" PRIMARY KEY ("identifier");
+ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierCategory" FOREIGN KEY ("categoryId") REFERENCES "Category" ("categoryId");
 
-CREATE TABLE "SystemGroup" (
-  "systemGroupId" bigint generated always as identity,
-  "name" varchar NOT NULL
+CREATE TABLE "Server" (
+  "serverId" bigint generated always as identity,
+  "name" varchar NOT NULL,
+  "suffix" varchar NOT NULL,
+  "kind" string NOT NULL DEFAULT server,
+  "ports" jsonb NOT NULL
 );
 
-ALTER TABLE "SystemGroup" ADD CONSTRAINT "pkSystemGroup" PRIMARY KEY ("systemGroup");
+ALTER TABLE "Server" ADD CONSTRAINT "pkServer" PRIMARY KEY ("server");
 
-CREATE TABLE "SystemGroupSystemUser" (
-  "systemGroupId" bigint NOT NULL,
-  "systemUserId" bigint NOT NULL
+CREATE TABLE "Journal" (
+  "journalId" bigint generated always as identity,
+  "identifierId" bigint NOT NULL,
+  "accountId" bigint NOT NULL,
+  "serverId" bigint NOT NULL,
+  "action" varchar NOT NULL,
+  "dateTime" timestamp with time zone NOT NULL,
+  "details" jsonb NOT NULL
 );
 
-ALTER TABLE "SystemGroupSystemUser" ADD CONSTRAINT "pkSystemGroupSystemUser" PRIMARY KEY ("systemGroupId", "systemUserId");
-ALTER TABLE "SystemGroupSystemUser" ADD CONSTRAINT "fkSystemGroupSystemUserSystemGroup" FOREIGN KEY ("systemGroupId") REFERENCES "SystemGroup" ("systemGroupId");
-ALTER TABLE "SystemGroupSystemUser" ADD CONSTRAINT "fkSystemGroupSystemUserSystemUser" FOREIGN KEY ("systemUserId") REFERENCES "SystemUser" ("systemUserId");
+ALTER TABLE "Journal" ADD CONSTRAINT "pkJournal" PRIMARY KEY ("journal");
+ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("identifierId");
+ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId");
+ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalServer" FOREIGN KEY ("serverId") REFERENCES "Server" ("serverId");
 
-CREATE TABLE "SystemPassport" (
-  "systemPassportId" bigint generated always as identity,
-  "number" varchar NOT NULL,
-  "issue" date NOT NULL
+CREATE TABLE "Role" (
+  "roleId" bigint generated always as identity,
+  "name" varchar NOT NULL,
+  "blocked" boolean NOT NULL DEFAULT false
 );
 
-ALTER TABLE "SystemPassport" ADD CONSTRAINT "pkSystemPassport" PRIMARY KEY ("systemPassport");
+ALTER TABLE "Role" ADD CONSTRAINT "pkRole" PRIMARY KEY ("role");
 
-CREATE TABLE "SystemSession" (
-  "systemSessionId" bigint generated always as identity,
-  "userId" bigint NOT NULL,
+CREATE TABLE "Permission" (
+  "permissionId" bigint generated always as identity,
+  "roleId" bigint NOT NULL,
+  "identifierId" bigint NOT NULL,
+  "action" varchar NOT NULL,
+  "kind" string NOT NULL
+);
+
+ALTER TABLE "Permission" ADD CONSTRAINT "pkPermission" PRIMARY KEY ("permission");
+ALTER TABLE "Permission" ADD CONSTRAINT "fkPermissionRole" FOREIGN KEY ("roleId") REFERENCES "Role" ("roleId");
+ALTER TABLE "Permission" ADD CONSTRAINT "fkPermissionIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("identifierId");
+
+CREATE TABLE "Session" (
+  "sessionId" bigint generated always as identity,
+  "accountId" bigint NOT NULL,
   "token" varchar NOT NULL,
-  "ip" varchar NOT NULL,
   "data" jsonb NOT NULL
 );
 
-ALTER TABLE "SystemSession" ADD CONSTRAINT "pkSystemSession" PRIMARY KEY ("systemSession");
-ALTER TABLE "SystemSession" ADD CONSTRAINT "fkSystemSessionUser" FOREIGN KEY ("userId") REFERENCES "SystemUser" ("systemUserId");
+ALTER TABLE "Session" ADD CONSTRAINT "pkSession" PRIMARY KEY ("session");
+ALTER TABLE "Session" ADD CONSTRAINT "fkSessionAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId");
