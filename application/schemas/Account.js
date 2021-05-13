@@ -8,14 +8,14 @@
   roles: { many: 'Role' },
 
   fullName: {
-    givenName: { type: 'string', required: false },
-    middleName: { type: 'string', required: false },
+    given: { type: 'string', required: false },
+    middle: { type: 'string', required: false },
     surname: { type: 'string', required: false },
   },
 
   birth: {
-    birthDate: { type: 'string', required: false },
-    birthPlace: { type: 'string', required: false },
+    date: { type: 'string', required: false },
+    place: { type: 'string', required: false },
   },
 
   address: {
