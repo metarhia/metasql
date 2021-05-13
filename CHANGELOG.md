@@ -2,6 +2,7 @@
 
 ## [Unreleased][unreleased]
 
+- Update index generation according to new metadata
 - Query.limit(count: number)
 - Query.offset(count: number)
 - Query.order(fields: string | Array<string>)
