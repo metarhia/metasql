@@ -47,8 +47,8 @@ metatests.test('Query.limit/offset', async (test) => {
   const res1 = await db.select('City').limit(3);
   test.strictEqual(res1.length, 3);
   test.strictEqual(res1[0].name, 'Beijing');
-  const res2 = await db.select('City').offset(2);
-  test.strictEqual(res2.length, 5);
+  const res2 = await db.select('City').offset(2).limit(4);
+  test.strictEqual(res2.length, 4);
   test.strictEqual(res2[0].name, 'Kiev');
   const res3 = await db.select('City').limit(4).offset(1);
   test.strictEqual(res3.length, 4);
