@@ -1,76 +1,86 @@
-interface Planet {
-  planetId: number;
+interface Application {
+  applicationId: number;
   name: string;
 }
 
-interface Country {
-  countryId: number;
-  planetId: number;
+interface Unit {
+  unitId: number;
   name: string;
+  applicationId: number;
 }
 
-interface City {
-  cityId: number;
-  countryId: number;
-  name: string;
-  location?: string;
-  population: number;
-}
-
-interface Address {
-  addressId: number;
-  cityId: number;
-  street: string;
-  building: string;
-  apartment: string;
-}
-
-interface SystemUser {
-  systemUserId: number;
+interface Account {
+  accountId: number;
   login: string;
   password: string;
+  blocked: boolean;
+  unitId: number;
 }
 
-interface Changes {
-  changesId: number;
-  creatorId: number;
-  authorId: number;
-  createTime: string;
-  updateTime: string;
-}
-
-interface Company {
-  companyId: number;
+interface Catalog {
+  catalogId: number;
   name: string;
+  parentId?: number;
+  applicationId: number;
 }
 
-interface CompanyCity {
-  companyCityId: number;
-  companyId: number;
-  cityId: number;
-}
-
-interface District {
-  districtId: number;
-  cityId: number;
+interface Category {
+  categoryId: number;
   name: string;
+  kind: string;
+  scope: string;
+  store: string;
+  allow: string;
+  applicationId: number;
 }
 
-interface SystemGroup {
-  systemGroupId: number;
+interface Identifier {
+  identifierId: number;
+  categoryId: number;
+  storage: string;
+  status: string;
+  creation: string;
+  change: string;
+  lock: boolean;
+  version: number;
+  hashsum: string;
+}
+
+interface Server {
+  serverId: number;
   name: string;
+  suffix: string;
+  kind: string;
+  ports: string;
 }
 
-interface SystemPassport {
-  systemPassportId: number;
-  number: string;
-  issue: string;
+interface Journal {
+  journalId: number;
+  identifierId: number;
+  accountId: number;
+  serverId: number;
+  action: string;
+  dateTime: string;
+  details: string;
 }
 
-interface SystemSession {
-  systemSessionId: number;
-  userId: number;
+interface Role {
+  roleId: number;
+  name: string;
+  blocked: boolean;
+}
+
+interface Permission {
+  permissionId: number;
+  roleId: number;
+  identifierId: number;
+  action: string;
+  kind: string;
+}
+
+interface Session {
+  sessionId: number;
+  accountId: number;
   token: string;
-  ip: string;
   data: string;
 }
