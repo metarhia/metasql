@@ -1,21 +1,23 @@
 CREATE TABLE "Application" (
-  "applicationId" bigint generated always as identity,
+  "id" bigint generated always as identity,
   "name" varchar NOT NULL
 );
 
-ALTER TABLE "Application" ADD CONSTRAINT "pkApplication" PRIMARY KEY ("application");
+ALTER TABLE "Application" ADD CONSTRAINT "pkApplication" PRIMARY KEY ("id");
+ALTER TABLE "Application" ADD CONSTRAINT "fkApplicationId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 
 CREATE TABLE "Unit" (
-  "unitId" bigint generated always as identity,
+  "id" bigint generated always as identity,
   "name" varchar NOT NULL,
   "applicationId" bigint NOT NULL
 );
 
-ALTER TABLE "Unit" ADD CONSTRAINT "pkUnit" PRIMARY KEY ("unit");
-ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("applicationId");
+ALTER TABLE "Unit" ADD CONSTRAINT "pkUnit" PRIMARY KEY ("id");
+ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
 
 CREATE TABLE "Account" (
-  "accountId" bigint generated always as identity,
+  "id" bigint generated always as identity,
   "login" varchar NOT NULL,
   "password" varchar NOT NULL,
   "blocked" boolean NOT NULL DEFAULT false,
@@ -24,20 +26,12 @@ CREATE TABLE "Account" (
   "fullNameMiddle" varchar,
   "fullNameSurname" varchar,
   "birthDate" varchar,
-  "birthPlace" varchar,
-  "addressCountryId" bigint,
-  "addressProvinceId" bigint,
-  "addressCityId" bigint,
-  "addressAddress1" varchar,
-  "addressAddress2" varchar,
-  "addressZipCode" varchar
+  "birthPlace" varchar
 );
 
-ALTER TABLE "Account" ADD CONSTRAINT "pkAccount" PRIMARY KEY ("account");
-ALTER TABLE "Account" ADD CONSTRAINT "fkAccountUnit" FOREIGN KEY ("unitId") REFERENCES "Unit" ("unitId");
-ALTER TABLE "Account" ADD CONSTRAINT "fkAccountAddressCountry" FOREIGN KEY ("addressCountryId") REFERENCES "Country" ("countryId");
-ALTER TABLE "Account" ADD CONSTRAINT "fkAccountAddressProvince" FOREIGN KEY ("addressProvinceId") REFERENCES "Province" ("provinceId");
-ALTER TABLE "Account" ADD CONSTRAINT "fkAccountAddressCity" FOREIGN KEY ("addressCityId") REFERENCES "City" ("cityId");
+ALTER TABLE "Account" ADD CONSTRAINT "pkAccount" PRIMARY KEY ("id");
+ALTER TABLE "Account" ADD CONSTRAINT "fkAccountId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Account" ADD CONSTRAINT "fkAccountUnit" FOREIGN KEY ("unitId") REFERENCES "Unit" ("id");
 
 CREATE TABLE "AccountRole" (
   "accountId" bigint NOT NULL,
@@ -45,19 +39,20 @@ CREATE TABLE "AccountRole" (
 );
 
 ALTER TABLE "AccountRole" ADD CONSTRAINT "pkAccountRole" PRIMARY KEY ("accountId", "roleId");
-ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId");
+ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("id");
 ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleRole" FOREIGN KEY ("roleId") REFERENCES "Role" ("roleId");
 
 CREATE TABLE "Catalog" (
-  "catalogId" bigint generated always as identity,
+  "id" bigint generated always as identity,
   "name" varchar NOT NULL,
   "parentId" bigint,
   "applicationId" bigint NOT NULL
 );
 
-ALTER TABLE "Catalog" ADD CONSTRAINT "pkCatalog" PRIMARY KEY ("catalog");
-ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogParent" FOREIGN KEY ("parentId") REFERENCES "Catalog" ("catalogId");
-ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("applicationId");
+ALTER TABLE "Catalog" ADD CONSTRAINT "pkCatalog" PRIMARY KEY ("id");
+ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogParent" FOREIGN KEY ("parentId") REFERENCES "Catalog" ("id");
+ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
 
 CREATE TABLE "CatalogIdentifier" (
   "catalogId" bigint NOT NULL,
@@ -65,27 +60,28 @@ CREATE TABLE "CatalogIdentifier" (
 );
 
 ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "pkCatalogIdentifier" PRIMARY KEY ("catalogId", "identifierId");
-ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierCatalog" FOREIGN KEY ("catalogId") REFERENCES "Catalog" ("catalogId");
-ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("identifierId");
+ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierCatalog" FOREIGN KEY ("catalogId") REFERENCES "Catalog" ("id");
+ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("id");
 
 CREATE TABLE "Category" (
-  "categoryId" bigint generated always as identity,
+  "id" bigint generated always as identity,
   "name" varchar NOT NULL,
-  "kind" string NOT NULL,
-  "scope" string NOT NULL DEFAULT application,
-  "store" string NOT NULL DEFAULT persistent,
-  "allow" string NOT NULL DEFAULT write,
+  "kind" varchar NOT NULL,
+  "scope" varchar NOT NULL DEFAULT 'application',
+  "store" varchar NOT NULL DEFAULT 'persistent',
+  "allow" varchar NOT NULL DEFAULT 'write',
   "applicationId" bigint NOT NULL
 );
 
-ALTER TABLE "Category" ADD CONSTRAINT "pkCategory" PRIMARY KEY ("category");
-ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("applicationId");
+ALTER TABLE "Category" ADD CONSTRAINT "pkCategory" PRIMARY KEY ("id");
+ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
 
 CREATE TABLE "Identifier" (
-  "identifierId" bigint generated always as identity,
+  "id" bigint generated always as identity,
   "categoryId" bigint NOT NULL,
-  "storage" string NOT NULL,
-  "status" string NOT NULL,
+  "storage" varchar NOT NULL,
+  "status" varchar NOT NULL,
   "creation" timestamp with time zone NOT NULL,
   "change" timestamp with time zone NOT NULL,
   "lock" boolean NOT NULL DEFAULT false,
@@ -93,18 +89,20 @@ CREATE TABLE "Identifier" (
   "hashsum" varchar NOT NULL
 );
 
-ALTER TABLE "Identifier" ADD CONSTRAINT "pkIdentifier" PRIMARY KEY ("identifier");
-ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierCategory" FOREIGN KEY ("categoryId") REFERENCES "Category" ("categoryId");
+ALTER TABLE "Identifier" ADD CONSTRAINT "pkIdentifier" PRIMARY KEY ("id");
+ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierCategory" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id");
 
 CREATE TABLE "Server" (
-  "serverId" bigint generated always as identity,
+  "id" bigint generated always as identity,
   "name" varchar NOT NULL,
   "suffix" varchar NOT NULL,
-  "kind" string NOT NULL DEFAULT server,
+  "kind" varchar NOT NULL DEFAULT 'server',
   "ports" jsonb NOT NULL
 );
 
-ALTER TABLE "Server" ADD CONSTRAINT "pkServer" PRIMARY KEY ("server");
+ALTER TABLE "Server" ADD CONSTRAINT "pkServer" PRIMARY KEY ("id");
+ALTER TABLE "Server" ADD CONSTRAINT "fkServerId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 
 CREATE TABLE "Journal" (
   "journalId" bigint generated always as identity,
@@ -116,10 +114,10 @@ CREATE TABLE "Journal" (
   "details" jsonb NOT NULL
 );
 
-ALTER TABLE "Journal" ADD CONSTRAINT "pkJournal" PRIMARY KEY ("journal");
-ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("identifierId");
-ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId");
-ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalServer" FOREIGN KEY ("serverId") REFERENCES "Server" ("serverId");
+ALTER TABLE "Journal" ADD CONSTRAINT "pkJournal" PRIMARY KEY ("journalId");
+ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("id");
+ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("id");
+ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalServer" FOREIGN KEY ("serverId") REFERENCES "Server" ("id");
 
 CREATE TABLE "Role" (
   "roleId" bigint generated always as identity,
@@ -127,19 +125,19 @@ CREATE TABLE "Role" (
   "blocked" boolean NOT NULL DEFAULT false
 );
 
-ALTER TABLE "Role" ADD CONSTRAINT "pkRole" PRIMARY KEY ("role");
+ALTER TABLE "Role" ADD CONSTRAINT "pkRole" PRIMARY KEY ("roleId");
 
 CREATE TABLE "Permission" (
   "permissionId" bigint generated always as identity,
   "roleId" bigint NOT NULL,
   "identifierId" bigint NOT NULL,
   "action" varchar NOT NULL,
-  "kind" string NOT NULL
+  "kind" varchar NOT NULL
 );
 
-ALTER TABLE "Permission" ADD CONSTRAINT "pkPermission" PRIMARY KEY ("permission");
+ALTER TABLE "Permission" ADD CONSTRAINT "pkPermission" PRIMARY KEY ("permissionId");
 ALTER TABLE "Permission" ADD CONSTRAINT "fkPermissionRole" FOREIGN KEY ("roleId") REFERENCES "Role" ("roleId");
-ALTER TABLE "Permission" ADD CONSTRAINT "fkPermissionIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("identifierId");
+ALTER TABLE "Permission" ADD CONSTRAINT "fkPermissionIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("id");
 
 CREATE TABLE "Session" (
   "sessionId" bigint generated always as identity,
@@ -148,5 +146,5 @@ CREATE TABLE "Session" (
   "data" jsonb NOT NULL
 );
 
-ALTER TABLE "Session" ADD CONSTRAINT "pkSession" PRIMARY KEY ("session");
-ALTER TABLE "Session" ADD CONSTRAINT "fkSessionAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId");
+ALTER TABLE "Session" ADD CONSTRAINT "pkSession" PRIMARY KEY ("sessionId");
+ALTER TABLE "Session" ADD CONSTRAINT "fkSessionAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("id");

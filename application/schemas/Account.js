@@ -17,13 +17,4 @@
     date: { type: 'string', required: false },
     place: { type: 'string', required: false },
   },
-
-  address: {
-    country: { type: 'Country', required: false },
-    province: { type: 'Province', required: false },
-    city: { type: 'City', required: false },
-    address1: { type: 'string', required: false },
-    address2: { type: 'string', required: false },
-    zipCode: { type: 'string', required: false },
-  },
 });
