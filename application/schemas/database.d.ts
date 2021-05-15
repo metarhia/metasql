@@ -1,3 +1,15 @@
+interface Identifier {
+  identifierId: number;
+  categoryId: number;
+  storage: string;
+  status: string;
+  creation: string;
+  change: string;
+  lock: boolean;
+  version: number;
+  hashsum: string;
+}
+
 interface Application {
   applicationId: number;
   name: string;
@@ -7,6 +19,12 @@ interface Unit {
   unitId: number;
   name: string;
   applicationId: number;
+}
+
+interface Role {
+  roleId: number;
+  name: string;
+  blocked: boolean;
 }
 
 interface Account {
@@ -34,18 +52,6 @@ interface Category {
   applicationId: number;
 }
 
-interface Identifier {
-  identifierId: number;
-  categoryId: number;
-  storage: string;
-  status: string;
-  creation: string;
-  change: string;
-  lock: boolean;
-  version: number;
-  hashsum: string;
-}
-
 interface Server {
   serverId: number;
   name: string;
@@ -62,12 +68,6 @@ interface Journal {
   action: string;
   dateTime: string;
   details: string;
-}
-
-interface Role {
-  roleId: number;
-  name: string;
-  blocked: boolean;
 }
 
 interface Permission {
