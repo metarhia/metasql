@@ -18,6 +18,7 @@ interface Application {
 interface Unit {
   unitId: number;
   name: string;
+  parentId?: number;
   applicationId: number;
 }
 
@@ -56,6 +57,7 @@ interface Server {
   serverId: number;
   name: string;
   suffix: string;
+  ip: string;
   kind: string;
   ports: string;
 }
@@ -67,6 +69,7 @@ interface Journal {
   serverId: number;
   action: string;
   dateTime: string;
+  ip: string;
   details: string;
 }
 
@@ -82,5 +85,6 @@ interface Session {
   sessionId: number;
   accountId: number;
   token: string;
+  ip: string;
   data: string;
 }

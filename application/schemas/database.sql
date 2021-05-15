@@ -25,11 +25,13 @@ ALTER TABLE "Application" ADD CONSTRAINT "fkApplicationId" FOREIGN KEY ("id") RE
 CREATE TABLE "Unit" (
   "id" bigint generated always as identity,
   "name" varchar NOT NULL,
+  "parentId" bigint,
   "applicationId" bigint NOT NULL
 );
 
 ALTER TABLE "Unit" ADD CONSTRAINT "pkUnit" PRIMARY KEY ("id");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitParent" FOREIGN KEY ("parentId") REFERENCES "Unit" ("id");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
 
 CREATE TABLE "Role" (
@@ -105,6 +107,7 @@ CREATE TABLE "Server" (
   "id" bigint generated always as identity,
   "name" varchar NOT NULL,
   "suffix" varchar NOT NULL,
+  "ip" inet NOT NULL,
   "kind" varchar NOT NULL DEFAULT 'server',
   "ports" jsonb NOT NULL
 );
@@ -119,6 +122,7 @@ CREATE TABLE "Journal" (
   "serverId" bigint NOT NULL,
   "action" varchar NOT NULL,
   "dateTime" timestamp with time zone NOT NULL,
+  "ip" inet NOT NULL,
   "details" jsonb NOT NULL
 );
 
@@ -143,6 +147,7 @@ CREATE TABLE "Session" (
   "sessionId" bigint generated always as identity,
   "accountId" bigint NOT NULL,
   "token" varchar NOT NULL,
+  "ip" inet NOT NULL,
   "data" jsonb NOT NULL
 );
 
