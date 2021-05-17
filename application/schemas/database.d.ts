@@ -10,29 +10,22 @@ interface Identifier {
   hashsum: string;
 }
 
-interface Application {
-  applicationId: number;
-  name: string;
-}
-
 interface Unit {
   unitId: number;
   name: string;
   parentId?: number;
-  applicationId: number;
 }
 
 interface Role {
   roleId: number;
   name: string;
-  applicationId: number;
   active: boolean;
 }
 
 interface Account {
   accountId: number;
   login: string;
-  password: string;
+  password?: string;
   active: boolean;
   unitId: number;
 }
@@ -41,7 +34,6 @@ interface Catalog {
   catalogId: number;
   name: string;
   parentId?: number;
-  applicationId: number;
 }
 
 interface Category {
@@ -51,7 +43,6 @@ interface Category {
   scope: string;
   store: string;
   allow: string;
-  applicationId: number;
 }
 
 interface Field {
