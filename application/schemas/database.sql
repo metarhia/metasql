@@ -12,7 +12,7 @@ CREATE TABLE "Identifier" (
 
 ALTER TABLE "Identifier" ADD CONSTRAINT "pkIdentifier" PRIMARY KEY ("id");
 ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
-ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierCategory" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id");
+ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierCategory" FOREIGN KEY ("categoryId") REFERENCES "Identifier" ("id");
 
 CREATE TABLE "Application" (
   "id" bigint generated always as identity,
@@ -33,20 +33,24 @@ ALTER TABLE "Unit" ADD CONSTRAINT "pkUnit" PRIMARY KEY ("id");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitParent" FOREIGN KEY ("parentId") REFERENCES "Unit" ("id");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
+CREATE UNIQUE INDEX "akUnitNaturalKey" ON "Unit" ("applicationId", "name");
 
 CREATE TABLE "Role" (
   "roleId" bigint generated always as identity,
   "name" varchar NOT NULL,
-  "blocked" boolean NOT NULL DEFAULT false
+  "applicationId" bigint NOT NULL,
+  "active" boolean NOT NULL DEFAULT true
 );
 
 ALTER TABLE "Role" ADD CONSTRAINT "pkRole" PRIMARY KEY ("roleId");
+ALTER TABLE "Role" ADD CONSTRAINT "fkRoleApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
+CREATE UNIQUE INDEX "akRoleNaturalKey" ON "Role" ("applicationId", "name");
 
 CREATE TABLE "Account" (
   "id" bigint generated always as identity,
   "login" varchar NOT NULL,
   "password" varchar NOT NULL,
-  "blocked" boolean NOT NULL DEFAULT false,
+  "active" boolean NOT NULL DEFAULT true,
   "unitId" bigint NOT NULL,
   "fullNameGiven" varchar,
   "fullNameMiddle" varchar,
@@ -103,6 +107,17 @@ ALTER TABLE "Category" ADD CONSTRAINT "pkCategory" PRIMARY KEY ("id");
 ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
 
+CREATE TABLE "Field" (
+  "id" bigint generated always as identity,
+  "name" varchar NOT NULL,
+  "categoryId" bigint NOT NULL
+);
+
+ALTER TABLE "Field" ADD CONSTRAINT "pkField" PRIMARY KEY ("id");
+ALTER TABLE "Field" ADD CONSTRAINT "fkFieldId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Field" ADD CONSTRAINT "fkFieldCategory" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id");
+CREATE UNIQUE INDEX "akFieldNaturalKey" ON "Field" ("categoryId", "name");
+
 CREATE TABLE "Server" (
   "id" bigint generated always as identity,
   "name" varchar NOT NULL,
@@ -135,13 +150,13 @@ CREATE TABLE "Permission" (
   "permissionId" bigint generated always as identity,
   "roleId" bigint NOT NULL,
   "identifierId" bigint NOT NULL,
-  "action" varchar NOT NULL,
-  "kind" varchar NOT NULL
+  "action" varchar NOT NULL
 );
 
 ALTER TABLE "Permission" ADD CONSTRAINT "pkPermission" PRIMARY KEY ("permissionId");
 ALTER TABLE "Permission" ADD CONSTRAINT "fkPermissionRole" FOREIGN KEY ("roleId") REFERENCES "Role" ("roleId");
 ALTER TABLE "Permission" ADD CONSTRAINT "fkPermissionIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("id");
+CREATE UNIQUE INDEX "akPermissionNaturalKey" ON "Permission" ("roleId", "identifierId");
 
 CREATE TABLE "Session" (
   "sessionId" bigint generated always as identity,
