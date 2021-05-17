@@ -3,8 +3,10 @@
 
   role: 'Role',
   identifier: 'Identifier',
-  action: 'string',
-  kind: { enum: ['read', 'insert', 'update', 'delete', 'audit', 'custom'] },
+  action: {
+    type: 'string',
+    lookup: ['read', 'insert', 'update', 'delete', 'audit'],
+  },
 
-  //naturalKey: { unique: ['role', 'category', 'catalog'] },
+  naturalKey: { unique: ['role', 'identifier'] },
 });

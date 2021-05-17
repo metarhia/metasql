@@ -2,5 +2,8 @@
   Entity: {},
 
   name: { type: 'string', unique: true },
-  blocked: { type: 'boolean', default: false },
+  application: 'Application',
+  active: { type: 'boolean', default: true },
+
+  naturalKey: { unique: ['application', 'name'] },
 });

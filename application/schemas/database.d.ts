@@ -25,14 +25,15 @@ interface Unit {
 interface Role {
   roleId: number;
   name: string;
-  blocked: boolean;
+  applicationId: number;
+  active: boolean;
 }
 
 interface Account {
   accountId: number;
   login: string;
   password: string;
-  blocked: boolean;
+  active: boolean;
   unitId: number;
 }
 
@@ -51,6 +52,12 @@ interface Category {
   store: string;
   allow: string;
   applicationId: number;
+}
+
+interface Field {
+  fieldId: number;
+  name: string;
+  categoryId: number;
 }
 
 interface Server {
@@ -78,7 +85,6 @@ interface Permission {
   roleId: number;
   identifierId: number;
   action: string;
-  kind: string;
 }
 
 interface Session {

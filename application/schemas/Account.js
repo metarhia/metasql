@@ -3,7 +3,7 @@
 
   login: { type: 'string', unique: true },
   password: 'string',
-  blocked: { type: 'boolean', default: false },
+  active: { type: 'boolean', default: true },
   unit: 'Unit',
   roles: { many: 'Role' },
 

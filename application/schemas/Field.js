@@ -4,5 +4,5 @@
   name: 'string',
   category: 'Category',
 
-  //naturalKey: { unique: ['name', 'category'] },
+  naturalKey: { unique: ['category', 'name'] },
 });
