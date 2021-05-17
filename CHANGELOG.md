@@ -8,6 +8,7 @@
 - Query.order(fields: string | Array<string>)
 - Query.desc(fields: string | Array<string>)
 - Support permissions for categories, catalogs, fields
+- Support unique alternative keys
 
 ## [1.1.1][] - 2021-05-08
 
