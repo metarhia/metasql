@@ -3,8 +3,7 @@
 
   name: { type: 'string', unique: true },
   kind: { enum: ['registry', 'dictionary', 'journal', 'details', 'relation'] },
-  scope: { enum: ['application', 'global', 'local'], default: 'application' },
+  scope: { enum: ['system', 'global', 'local'], default: 'system' },
   store: { enum: ['persistent', 'memory'], default: 'persistent' },
   allow: { enum: ['write', 'append', 'read'], default: 'write' },
-  application: 'Application',
 });

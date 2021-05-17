@@ -14,37 +14,23 @@ ALTER TABLE "Identifier" ADD CONSTRAINT "pkIdentifier" PRIMARY KEY ("id");
 ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierCategory" FOREIGN KEY ("categoryId") REFERENCES "Identifier" ("id");
 
-CREATE TABLE "Application" (
-  "id" bigint generated always as identity,
-  "name" varchar NOT NULL
-);
-
-ALTER TABLE "Application" ADD CONSTRAINT "pkApplication" PRIMARY KEY ("id");
-ALTER TABLE "Application" ADD CONSTRAINT "fkApplicationId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
-
 CREATE TABLE "Unit" (
   "id" bigint generated always as identity,
   "name" varchar NOT NULL,
-  "parentId" bigint,
-  "applicationId" bigint NOT NULL
+  "parentId" bigint
 );
 
 ALTER TABLE "Unit" ADD CONSTRAINT "pkUnit" PRIMARY KEY ("id");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitParent" FOREIGN KEY ("parentId") REFERENCES "Unit" ("id");
-ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
-CREATE UNIQUE INDEX "akUnitNaturalKey" ON "Unit" ("applicationId", "name");
 
 CREATE TABLE "Role" (
   "roleId" bigint generated always as identity,
   "name" varchar NOT NULL,
-  "applicationId" bigint NOT NULL,
   "active" boolean NOT NULL DEFAULT true
 );
 
 ALTER TABLE "Role" ADD CONSTRAINT "pkRole" PRIMARY KEY ("roleId");
-ALTER TABLE "Role" ADD CONSTRAINT "fkRoleApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
-CREATE UNIQUE INDEX "akRoleNaturalKey" ON "Role" ("applicationId", "name");
 
 CREATE TABLE "Account" (
   "id" bigint generated always as identity,
@@ -75,14 +61,12 @@ ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleRole" FOREIGN KEY ("roleI
 CREATE TABLE "Catalog" (
   "id" bigint generated always as identity,
   "name" varchar NOT NULL,
-  "parentId" bigint,
-  "applicationId" bigint NOT NULL
+  "parentId" bigint
 );
 
 ALTER TABLE "Catalog" ADD CONSTRAINT "pkCatalog" PRIMARY KEY ("id");
 ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogParent" FOREIGN KEY ("parentId") REFERENCES "Catalog" ("id");
-ALTER TABLE "Catalog" ADD CONSTRAINT "fkCatalogApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
 
 CREATE TABLE "CatalogIdentifier" (
   "catalogId" bigint NOT NULL,
@@ -97,15 +81,13 @@ CREATE TABLE "Category" (
   "id" bigint generated always as identity,
   "name" varchar NOT NULL,
   "kind" varchar NOT NULL,
-  "scope" varchar NOT NULL DEFAULT 'application',
+  "scope" varchar NOT NULL DEFAULT 'system',
   "store" varchar NOT NULL DEFAULT 'persistent',
-  "allow" varchar NOT NULL DEFAULT 'write',
-  "applicationId" bigint NOT NULL
+  "allow" varchar NOT NULL DEFAULT 'write'
 );
 
 ALTER TABLE "Category" ADD CONSTRAINT "pkCategory" PRIMARY KEY ("id");
 ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
-ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryApplication" FOREIGN KEY ("applicationId") REFERENCES "Application" ("id");
 
 CREATE TABLE "Field" (
   "id" bigint generated always as identity,
