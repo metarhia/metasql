@@ -37,7 +37,7 @@ CREATE TABLE "Account" (
   "login" varchar NOT NULL,
   "password" varchar NOT NULL,
   "active" boolean NOT NULL DEFAULT true,
-  "unitId" bigint NOT NULL,
+  "unitNamyId" bigint NOT NULL,
   "fullNameGiven" varchar,
   "fullNameMiddle" varchar,
   "fullNameSurname" varchar,
@@ -47,7 +47,7 @@ CREATE TABLE "Account" (
 
 ALTER TABLE "Account" ADD CONSTRAINT "pkAccount" PRIMARY KEY ("id");
 ALTER TABLE "Account" ADD CONSTRAINT "fkAccountId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
-ALTER TABLE "Account" ADD CONSTRAINT "fkAccountUnit" FOREIGN KEY ("unitId") REFERENCES "Unit" ("id");
+ALTER TABLE "Account" ADD CONSTRAINT "fkAccountUnitNamy" FOREIGN KEY ("unitNamyId") REFERENCES "Unit" ("id");
 
 CREATE TABLE "AccountRole" (
   "accountId" bigint NOT NULL,
