@@ -25,9 +25,8 @@ interface Role {
 interface Account {
   accountId: number;
   login: string;
-  password?: string;
+  password: string;
   active: boolean;
-  unitId: number;
 }
 
 interface Catalog {
