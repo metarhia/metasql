@@ -6,7 +6,7 @@ const metasql = require('..');
 
 metatests.test('Migrations: generate', async (test) => {
   const dir = process.cwd();
-  const schemaPath = path.join(dir, '../node_modules/matadomain/schemas');
+  const schemaPath = path.join(dir, 'node_modules/matadomain/schemas');
   try {
     await metasql.generate(schemaPath);
   } catch (err) {
