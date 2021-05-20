@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/metarhia/metasql#readme",
   "dependencies": {
+    "metadomain": "^1.0.1",
     "metaschema": "^1.2.2",
     "metavm": "^1.0.2",
     "pg": "^8.5.1"

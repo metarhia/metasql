@@ -5,7 +5,8 @@ const metatests = require('metatests');
 const metasql = require('..');
 
 metatests.test('Create structure', async (test) => {
-  const schemaPath = path.join(process.cwd(), 'application/schemas');
+  const dir = process.cwd();
+  const schemaPath = path.join(dir, 'node_modules/metadomain/schemas');
   try {
     await metasql.create(schemaPath);
   } catch (err) {
