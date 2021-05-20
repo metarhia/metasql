@@ -8,7 +8,7 @@ const [, , command, version] = process.argv;
 
 const schemaPath = __dirname.includes('node_modules')
   ? path.join(process.cwd(), 'application/schemas')
-  : path.join(__dirname, '../node_modules/matadomain/schemas');
+  : path.join(__dirname, '../node_modules/metadomain/schemas');
 
 if (command === 'c') {
   metasql.create(schemaPath, schemaPath);
