@@ -9,6 +9,7 @@
 - Query.desc(fields: string | Array<string>)
 - Support permissions for categories, catalogs, fields
 - Support unique alternative keys
+- Generate nullable fields
 
 ## [1.1.1][] - 2021-05-08
 
