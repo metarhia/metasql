@@ -1,4 +1,0 @@
-({
-  city: 'City',
-  name: 'string',
-});
