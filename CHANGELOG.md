@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.1.2][] - 2021-05-14
+
 - Update index generation according to new metadata
 - Query.limit(count: number)
 - Query.offset(count: number)
@@ -46,7 +48,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.1...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/metarhia/metasql/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/metarhia/metasql/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/metarhia/metasql/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/metarhia/metasql/compare/v1.0.0...v1.0.1
