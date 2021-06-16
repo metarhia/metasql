@@ -43,6 +43,14 @@ metatests.test('Database.select', async (test) => {
   test.end();
 });
 
+metatests.test('Database.select and/or', async (test) => {
+  const res = await db.select('City', ['*'], { cityId: 1 }, { name: 'Kiev' });
+  test.strictEqual(res.length, 2);
+  test.strictEqual(res[0], { cityId: '1', name: 'Beijing', countryId: '2' });
+  test.strictEqual(res[1], { cityId: '3', name: 'Kiev', countryId: '1' });
+  test.end();
+});
+
 metatests.test('Query.limit/offset', async (test) => {
   const res1 = await db.select('City').limit(3);
   test.strictEqual(res1.length, 3);

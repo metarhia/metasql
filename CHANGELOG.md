@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Support `OR` in queries
+
 ## [1.1.3][] - 2021-05-25
 
 - Remove debug output
