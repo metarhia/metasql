@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Add typings for Database and Query classes
+
 ## [1.1.5][] - 2021-07-04
 
 - Implement CRUD plugin
