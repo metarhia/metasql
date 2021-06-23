@@ -76,13 +76,26 @@ metatests.test('Query.order/desc', async (test) => {
   test.end();
 });
 
-metatests.test('Database.insert/update/delete', async (test) => {
+metatests.test('Database.insert/update/delete/upsert', async (test) => {
   const res1 = await db.insert('City', { name: 'Odessa', countryId: 1 });
   test.strictEqual(res1.rowCount, 1);
   const res2 = await db.update('City', { name: 'ODESSA' }, { name: 'Odessa' });
   test.strictEqual(res2.rowCount, 1);
-  const res3 = await db.delete('City', { name: 'ODESSA' });
+  const res3 = await db.upsert(
+    'City',
+    { name: 'Odessa', countryId: 1 },
+    { name: 'ODESSA' }
+  );
   test.strictEqual(res3.rowCount, 1);
+  const res4 = await db.delete('City', { name: 'Odessa' });
+  test.strictEqual(res4.rowCount, 1);
+  const res5 = await db.upsert(
+    'City',
+    { name: 'Lao Cai', countryId: 3 },
+    { name: 'Lao Cai' }
+  );
+  test.strictEqual(res5.rowCount, 1);
+  await db.delete('City', { name: 'Lao Cai' });
   test.end();
 });
 
