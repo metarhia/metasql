@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Support `OR` in queries
+- Add typing for Database and Query classes
 
 ## [1.1.3][] - 2021-05-25
 
