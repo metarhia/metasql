@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@types/node": "^15.6.1",
+    "@types/pg": "^8.6.0",
     "eslint": "^7.27.0",
     "eslint-config-metarhia": "^7.0.1",
     "eslint-config-prettier": "^8.2.0",
