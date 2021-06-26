@@ -44,6 +44,11 @@ export class Database {
     delta: object,
     ...conditions: Array<object>
   ) => Promise<QueryResult>;
+  upsert: (
+    table: string,
+    record: object,
+    constraint: object
+  ) => Promise<QueryResult>;
   close: () => void;
 }
 
