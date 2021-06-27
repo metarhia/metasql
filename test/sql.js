@@ -124,3 +124,10 @@ metatests.test('Database.dict', async (test) => {
   test.strictEqual(res[key], '1');
   test.end();
 });
+
+metatests.test('Database.fields', async (test) => {
+  const res = await db.fields('City');
+  test.strictEqual(res.length, 3);
+  test.equal(res, ['cityId', 'name', 'countryId']);
+  test.end();
+});
