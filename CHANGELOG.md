@@ -5,6 +5,8 @@
 - Support `OR` in queries
 - New API methods for Database:
   - async upsert(table, record, condition): Object
+  - async fields(table): Array
+  - async tables(): Array
 - Add typing for Database and Query classes
 
 ## [1.1.3][] - 2021-05-25
