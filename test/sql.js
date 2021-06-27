@@ -131,3 +131,17 @@ metatests.test('Database.fields', async (test) => {
   test.equal(res, ['cityId', 'name', 'countryId']);
   test.end();
 });
+
+metatests.test('Database.tables', async (test) => {
+  const res = await db.tables();
+  test.strictEqual(res.length, 6);
+  test.equal(res, [
+    'Account',
+    'AccountRole',
+    'Role',
+    'Country',
+    'City',
+    'Session',
+  ]);
+  test.end();
+});

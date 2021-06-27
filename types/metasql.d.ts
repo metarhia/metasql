@@ -50,6 +50,7 @@ export class Database {
     constraint: object
   ) => Promise<QueryResult>;
   fields: (table: string) => Promise<Array<string>>;
+  tables: () => Promise<Array<string>>;
   close: () => void;
 }
 
