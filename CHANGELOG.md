@@ -2,12 +2,16 @@
 
 ## [Unreleased][unreleased]
 
-- Support `OR` in queries
 - New API methods for Database:
   - async upsert(table, record, condition): Object
   - async fields(table): Array
   - async tables(): Array
 - Add typing for Database and Query classes
+
+## [1.1.4][] - 2021-06-30
+
+- Support `OR` in queries
+- Database will be generated only from Schema.KIND_STORED schemas
 
 ## [1.1.3][] - 2021-05-25
 
@@ -60,7 +64,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.3...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.4...HEAD
+[1.1.4]: https://github.com/metarhia/metasql/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/metarhia/metasql/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/metarhia/metasql/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/metarhia/metasql/compare/v1.1.0...v1.1.1
