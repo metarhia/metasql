@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Support `OR` in queries
+- Database will be generated only from Schema.KIND_STORED schemas
 
 ## [1.1.3][] - 2021-05-25
 
