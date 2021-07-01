@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Implement CRUD plugin
+
 ## [1.1.4][] - 2021-06-30
 
 - Support `OR` in queries
