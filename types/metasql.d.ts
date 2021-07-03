@@ -1,5 +1,7 @@
 import { QueryResult } from 'pg';
 
+type ScalarValue = string | number | undefined;
+
 export interface DatabaseConfig {
   host: string;
   port: number;
@@ -27,24 +29,24 @@ export class Database {
     table: string,
     field: string,
     ...conditions: Array<object>
-  ): Promise<string | number | undefined>;
-  col: (
+  ): Promise<ScalarValue>;
+  col(
     table: string,
     field: string,
     ...conditions: Array<object>
-  ) => Promise<Array<string | number | undefined>>;
-  dict: (
+  ): Promise<Array<ScalarValue>>;
+  dict(
     table: string,
     fields: Array<string>,
     ...conditions: Array<object>
-  ) => Promise<object>;
-  delete: (table: string, ...conditions: Array<object>) => Promise<QueryResult>;
-  update: (
+  ): Promise<object>;
+  delete(table: string, ...conditions: Array<object>): Promise<QueryResult>;
+  update(
     table: string,
     delta: object,
     ...conditions: Array<object>
-  ) => Promise<QueryResult>;
-  close: () => void;
+  ): Promise<QueryResult>;
+  close(): void;
 }
 
 export class Query {
