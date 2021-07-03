@@ -2,11 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+- Add typings for Database and Query classes
+
 ## [1.1.4][] - 2021-06-30
 
 - Support `OR` in queries
 - Database will be generated only from Schema.KIND_STORED schemas
-- Add typing for Database and Query classes
 
 ## [1.1.3][] - 2021-05-25
 
