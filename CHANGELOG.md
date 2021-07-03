@@ -3,6 +3,8 @@
 ## [Unreleased][unreleased]
 
 - Implement CRUD plugin
+- Save Query to declarative format
+- Create Query from declarative format
 
 ## [1.1.4][] - 2021-06-30
 
