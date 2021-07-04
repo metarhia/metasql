@@ -4,6 +4,12 @@
 
 - Add typings for Database and Query classes
 
+## [1.1.5][] - 2021-07-04
+
+- Implement CRUD plugin
+- Save Query to declarative format
+- Create Query from declarative format
+
 ## [1.1.4][] - 2021-06-30
 
 - Support `OR` in queries
@@ -60,7 +66,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.4...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.5...HEAD
+[1.1.5]: https://github.com/metarhia/metasql/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/metarhia/metasql/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/metarhia/metasql/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/metarhia/metasql/compare/v1.1.1...v1.1.2
