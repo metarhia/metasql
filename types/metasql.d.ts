@@ -1,5 +1,7 @@
 import { QueryResult } from 'pg';
 
+type ScalarValue = string | number | undefined;
+
 export interface DatabaseConfig {
   host: string;
   port: number;
@@ -27,23 +29,23 @@ export class Database {
     table: string,
     field: string,
     ...conditions: Array<object>
-  ): Promise<string | number | undefined>;
-  col: (
+  ): Promise<ScalarValue>;
+  col(
     table: string,
     field: string,
     ...conditions: Array<object>
-  ) => Promise<Array<string | number | undefined>>;
-  dict: (
+  ): Promise<Array<ScalarValue>>;
+  dict(
     table: string,
     fields: Array<string>,
     ...conditions: Array<object>
-  ) => Promise<object>;
-  delete: (table: string, ...conditions: Array<object>) => Promise<QueryResult>;
-  update: (
+  ): Promise<object>;
+  delete(table: string, ...conditions: Array<object>): Promise<QueryResult>;
+  update(
     table: string,
     delta: object,
     ...conditions: Array<object>
-  ) => Promise<QueryResult>;
+  ): Promise<QueryResult>;
   upsert: (
     table: string,
     record: object,
@@ -51,7 +53,7 @@ export class Database {
   ) => Promise<QueryResult>;
   fields: (table: string) => Promise<Array<string>>;
   tables: () => Promise<Array<string>>;
-  close: () => void;
+  close(): void;
 }
 
 export class Query {
@@ -66,4 +68,13 @@ export class Query {
   limit(count: number): Query;
   offset(count: number): Query;
   then(resolve: (rows: Array<object>) => void, reject: Function): void;
+  toObject(): QueryObject;
+  static from(db: Database, metadata: QueryObject): Query;
+}
+
+interface QueryObject {
+  table: string;
+  fields: string | Array<string>;
+  where?: Array<object>;
+  options?: Array<object>;
 }
