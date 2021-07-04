@@ -4,7 +4,7 @@
 
 - New API methods for Database:
   - async count(table, condition): number
-  
+
 ## [1.1.5][] - 2021-07-04
 
 - Implement CRUD plugin
