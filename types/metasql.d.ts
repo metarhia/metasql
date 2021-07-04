@@ -35,6 +35,7 @@ export class Database {
     field: string,
     ...conditions: Array<object>
   ): Promise<Array<ScalarValue>>;
+  count(table: string, ...conditions: Array<object>): Promise<number>;
   dict(
     table: string,
     fields: Array<string>,
