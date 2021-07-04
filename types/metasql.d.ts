@@ -1,3 +1,3 @@
 export class Database {
-  count(table: string, condition?: object): Promise<number>;
+  count(table: string, ...conditions: Array<object>): Promise<number>;
 }
