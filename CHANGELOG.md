@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+- New API methods for Database:
+  - async upsert(table, record, condition): Object
+  - async fields(table): Array
+  - async tables(): Array
+- Add typings for Database and Query classes
+
 ## [1.1.5][] - 2021-07-04
 
 - Implement CRUD plugin

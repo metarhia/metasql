@@ -96,13 +96,26 @@ metatests.test('Query.toObject/from', async (test) => {
   test.end();
 });
 
-metatests.test('Database.insert/update/delete', async (test) => {
+metatests.test('Database.insert/update/delete/upsert', async (test) => {
   const res1 = await db.insert('City', { name: 'Odessa', countryId: 1 });
   test.strictEqual(res1.rowCount, 1);
   const res2 = await db.update('City', { name: 'ODESSA' }, { name: 'Odessa' });
   test.strictEqual(res2.rowCount, 1);
-  const res3 = await db.delete('City', { name: 'ODESSA' });
+  const res3 = await db.upsert(
+    'City',
+    { name: 'Odessa', countryId: 1 },
+    { name: 'ODESSA' }
+  );
   test.strictEqual(res3.rowCount, 1);
+  const res4 = await db.delete('City', { name: 'Odessa' });
+  test.strictEqual(res4.rowCount, 1);
+  const res5 = await db.upsert(
+    'City',
+    { name: 'Lao Cai', countryId: 3 },
+    { name: 'Lao Cai' }
+  );
+  test.strictEqual(res5.rowCount, 1);
+  await db.delete('City', { name: 'Lao Cai' });
   test.end();
 });
 
@@ -129,5 +142,26 @@ metatests.test('Database.dict', async (test) => {
   test.strictEqual(typeof res, 'object');
   const key = 'Kiev';
   test.strictEqual(res[key], '1');
+  test.end();
+});
+
+metatests.test('Database.fields', async (test) => {
+  const res = await db.fields('City');
+  test.strictEqual(res.length, 3);
+  test.equal(res, ['cityId', 'name', 'countryId']);
+  test.end();
+});
+
+metatests.test('Database.tables', async (test) => {
+  const res = await db.tables();
+  test.strictEqual(res.length, 6);
+  test.equal(res, [
+    'Account',
+    'AccountRole',
+    'Role',
+    'Country',
+    'City',
+    'Session',
+  ]);
   test.end();
 });
