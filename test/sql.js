@@ -149,4 +149,12 @@ const metadomain = require('metadomain');
     test.strictEqual(res[key], '1');
     test.end();
   });
+
+  metatests.test('Database.count', async (test) => {
+    const res1 = await db.count('Country');
+    test.strictEqual(res1, 4);
+    const res2 = await db.count('City', { name: 'Kiev' });
+    test.strictEqual(res2, 1);
+    test.end();
+  });
 })();

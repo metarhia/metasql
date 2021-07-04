@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+- New API methods for Database:
+  - async count(table, condition): number
+
 ## [1.3.0][] - 2021-08-07
 
 - Use `options.logger` and global `console` if no `options.console` for backward
