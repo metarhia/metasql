@@ -61,4 +61,13 @@ export class Query {
   limit(count: number): Query;
   offset(count: number): Query;
   then(resolve: (rows: Array<object>) => void, reject: Function): void;
+  toObject(): QueryObject;
+  static from(db: Database, metadata: QueryObject): Query;
+}
+
+interface QueryObject {
+  table: string;
+  fields: string | Array<string>;
+  where?: Array<object>;
+  options?: Array<object>;
 }
