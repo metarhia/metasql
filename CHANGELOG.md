@@ -4,6 +4,7 @@
 
 - New API methods for Database:
   - async count(table, condition): number
+- Add typings for Database and Query classes
 
 ## [1.1.5][] - 2021-07-04
 
