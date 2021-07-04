@@ -1,7 +1,7 @@
 'use strict';
 
 const metatests = require('metatests');
-const { Database } = require('..');
+const { Database, Query } = require('..');
 
 const config = {
   host: process.env.POSTGRES_HOST || '127.0.0.1',
@@ -73,6 +73,26 @@ metatests.test('Query.order/desc', async (test) => {
   test.strictEqual(res3[0].name, 'Wuhan');
   const res4 = await db.select('City').desc('name').order('name');
   test.strictEqual(res4[0].name, 'Beijing');
+  test.end();
+});
+
+metatests.test('Query.toObject/from', async (test) => {
+  const query1 = db
+    .select('City', ['*'], { cityId: 1 }, { name: 'Kiev' })
+    .limit(3)
+    .offset(1)
+    .order('name');
+  const metadata = query1.toObject();
+  const expected = {
+    table: 'City',
+    fields: ['*'],
+    where: [{ cityId: 1 }, { name: 'Kiev' }],
+    options: { limit: 3, offset: 1, order: ['name'] },
+  };
+  test.strictEqual(metadata, expected);
+
+  const res = await Query.from(db, metadata);
+  test.strictEqual(res, [{ cityId: '3', name: 'Kiev', countryId: '1' }]);
   test.end();
 });
 
