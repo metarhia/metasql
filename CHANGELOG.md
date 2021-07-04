@@ -6,6 +6,7 @@
   - async upsert(table, record, condition): Object
   - async fields(table): Array
   - async tables(): Array
+  - async count(table, condition): number
 - Add typings for Database and Query classes
 
 ## [1.1.5][] - 2021-07-04

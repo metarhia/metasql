@@ -137,6 +137,14 @@ metatests.test('Database.col', async (test) => {
   test.end();
 });
 
+metatests.test('Database.count', async (test) => {
+  const res1 = await db.count('Country');
+  test.strictEqual(res1, 4);
+  const res2 = await db.count('City', { name: 'Kiev' });
+  test.strictEqual(res2, 1);
+  test.end();
+});
+
 metatests.test('Database.dict', async (test) => {
   const res = await db.dict('City', ['name', 'countryId']);
   test.strictEqual(typeof res, 'object');
