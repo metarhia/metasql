@@ -4,6 +4,7 @@
 
 - Add typings for Database and Query classes
 - Move types to package root
+- Generated `always as identity` just for `Registry`
 
 ## [1.1.5][] - 2021-07-04
 
