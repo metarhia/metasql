@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Add typings for Database and Query classes
+- Move types to package root
 
 ## [1.1.5][] - 2021-07-04
 
