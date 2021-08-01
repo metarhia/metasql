@@ -6,6 +6,7 @@
 - Move types to package root
 - Generated `always as identity` just for `Registry`
 - Support `DEFAULT CURRENT_TIMESTAMP` for `datetime`
+- Generate SQL for bootstrapping db data
 
 ## [1.1.5][] - 2021-07-04
 
