@@ -6,7 +6,7 @@ const { Database, Query } = require('..');
 const config = {
   host: process.env.POSTGRES_HOST || '127.0.0.1',
   port: 5432,
-  database: 'application',
+  database: 'metasql',
   user: 'marcus',
   password: 'marcus',
   logger: { db: console.log, debug: () => {} },
