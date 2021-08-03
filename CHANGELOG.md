@@ -7,6 +7,7 @@
 - Generated `always as identity` just for `Registry`
 - Support `DEFAULT CURRENT_TIMESTAMP` for `datetime`
 - Generate SQL for bootstrapping db data
+- Pass `Model` to `Database` to access schemas
 
 ## [1.1.5][] - 2021-07-04
 
