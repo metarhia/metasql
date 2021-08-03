@@ -3,7 +3,7 @@
 const metatests = require('metatests');
 const { Database, Query } = require('..');
 
-const config = {
+const options = {
   host: process.env.POSTGRES_HOST || '127.0.0.1',
   port: 5432,
   database: 'metasql',
@@ -12,7 +12,7 @@ const config = {
   logger: { db: console.log, debug: () => {} },
 };
 
-const db = new Database(config);
+const db = new Database(options);
 
 metatests.test('Open database', async (test) => {
   test.strictEqual(db.constructor.name, 'Database');

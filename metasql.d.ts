@@ -1,4 +1,5 @@
-import { QueryResult } from 'pg';
+import { QueryResult, Pool } from 'pg';
+import { Model } from 'metaschema';
 
 type ScalarValue = string | number | undefined;
 
@@ -12,6 +13,9 @@ export interface DatabaseConfig {
 }
 
 export class Database {
+  pool: Pool;
+  model: Model;
+  logger: Console;
   constructor(config: DatabaseConfig);
   query(sql: string, values: Array<string | number>): Promise<QueryResult>;
   insert(table: string, record: object): Promise<QueryResult>;
