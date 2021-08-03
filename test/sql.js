@@ -9,7 +9,7 @@ const options = {
   database: 'metasql',
   user: 'marcus',
   password: 'marcus',
-  logger: { db: console.log, debug: () => {} },
+  console: { debug: () => {} },
 };
 
 const db = new Database(options);
