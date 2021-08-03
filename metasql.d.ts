@@ -18,6 +18,7 @@ export class Database {
   console: Console;
   constructor(config: DatabaseConfig);
   query(sql: string, values: Array<string | number>): Promise<QueryResult>;
+  id(name: string): Promise<number>;
   insert(table: string, record: object): Promise<QueryResult>;
   select(
     table: string,
