@@ -15,7 +15,7 @@ export interface DatabaseConfig {
 export class Database {
   pool: Pool;
   model: Model;
-  logger: Console;
+  console: Console;
   constructor(config: DatabaseConfig);
   query(sql: string, values: Array<string | number>): Promise<QueryResult>;
   insert(table: string, record: object): Promise<QueryResult>;
