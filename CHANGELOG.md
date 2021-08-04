@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.2.0][] - 2021-08-04
+
 - Add typings for Database and Query classes
 - Move types to package root
 - Generated `always as identity` just for `Registry`
@@ -73,7 +75,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.5...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/metarhia/metasql/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/metarhia/metasql/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/metarhia/metasql/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/metarhia/metasql/compare/v1.1.2...v1.1.3
