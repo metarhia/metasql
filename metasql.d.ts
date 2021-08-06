@@ -65,6 +65,7 @@ export class Query {
   desc(field: string | Array<string>): Query;
   limit(count: number): Query;
   offset(count: number): Query;
+  returning(fields: Array<string>): Query;
   then(resolve: (rows: Array<object>) => void, reject: Function): void;
   toObject(): QueryObject;
   static from(db: Database, metadata: QueryObject): Query;
