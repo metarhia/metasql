@@ -5,6 +5,7 @@
 - Use `options.logger` and global `console` if no `options.console` for backward
   compatibility, fallback will be better than crash
 - Add `{ delete: 'cascade' }` to generate `ON DELETE CASCADE` for `{ many }`
+- Implement `.returning(fields)` for `Query`
 
 ## [1.2.0][] - 2021-08-04
 
