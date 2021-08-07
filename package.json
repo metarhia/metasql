@@ -1,21 +1,21 @@
 {
   "name": "metasql",
-  "version": "1.1.5",
+  "version": "1.3.0",
   "description": "MetaSQL Database schema generator, migrations and query builder for Metarhia",
   "main": "metasql.js",
-  "types": "types/metasql.d.ts",
+  "types": "metasql.d.ts",
   "bin": {
     "metasql": "bin/cli.js"
   },
   "files": [
     "lib/",
-    "types/",
-    "bin/"
+    "bin/",
+    "metasql.d.ts"
   ],
   "scripts": {
     "lint": "eslint . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
     "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
-    "types": "tsc -p types/tsconfig.json",
+    "types": "tsc -p tsconfig.json",
     "test": "npm run lint && npm run types && metatests test/"
   },
   "repository": {
@@ -37,17 +37,17 @@
   },
   "homepage": "https://github.com/metarhia/metasql#readme",
   "dependencies": {
-    "metadomain": "^1.0.3",
-    "metaschema": "^1.3.2",
-    "metavm": "^1.0.2",
-    "pg": "^8.5.1"
+    "metadomain": "^1.0.5",
+    "metaschema": "^1.3.3",
+    "metavm": "^1.0.3",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
-    "@types/node": "^15.14.1",
+    "@types/node": "^16.3.3",
     "@types/pg": "^8.6.0",
-    "eslint": "^7.30.0",
+    "eslint": "^7.31.0",
     "eslint-config-metarhia": "^7.0.1",
-    "eslint-config-prettier": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
     "metatests": "^0.7.2",
