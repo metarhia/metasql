@@ -1,4 +1,5 @@
-import { QueryResult } from 'pg';
+import { QueryResult, Pool } from 'pg';
+import { Model } from 'metaschema';
 
 type ScalarValue = string | number | undefined;
 
@@ -12,9 +13,12 @@ export interface DatabaseConfig {
 }
 
 export class Database {
+  pool: Pool;
+  model: Model;
+  console: Console;
   constructor(config: DatabaseConfig);
   query(sql: string, values: Array<string | number>): Promise<QueryResult>;
-  insert(table: string, record: object): Promise<QueryResult>;
+  insert(table: string, record: object): Modify;
   select(
     table: string,
     fields: Array<string>,
@@ -41,17 +45,9 @@ export class Database {
     fields: Array<string>,
     ...conditions: Array<object>
   ): Promise<object>;
-  delete(table: string, ...conditions: Array<object>): Promise<QueryResult>;
-  update(
-    table: string,
-    delta: object,
-    ...conditions: Array<object>
-  ): Promise<QueryResult>;
-  upsert: (
-    table: string,
-    record: object,
-    constraint: object
-  ) => Promise<QueryResult>;
+  delete(table: string, ...conditions: Array<object>): Modify;
+  update(table: string, delta: object, ...conditions: Array<object>): Modify;
+  upsert: (table: string, record: object, constraint: object) => Modify;
   fields: (table: string) => Promise<Array<string>>;
   tables: () => Promise<Array<string>>;
   close(): void;
@@ -77,5 +73,19 @@ interface QueryObject {
   table: string;
   fields: string | Array<string>;
   where?: Array<object>;
-  options?: Array<object>;
+  options: Array<object>;
+}
+
+export class Modify {
+  constructor(db: Database, sql: string, args: Array<string>);
+  returning(field: string | Array<string>): Modify;
+  then(resolve: (rows: Array<object>) => void, reject: Function): void;
+  toObject(): ModifyObject;
+  static from(db: Database, metadata: ModifyObject): Modify;
+}
+
+interface ModifyObject {
+  sql: string;
+  args: Array<string>;
+  options: Array<object>;
 }

@@ -6,8 +6,26 @@
   - async upsert(table, record, condition): Object
   - async fields(table): Array
   - async tables(): Array
-  - async count(table, condition): number
+
+## [1.3.0][] - 2021-08-07
+
+- Use `options.logger` and global `console` if no `options.console` for backward
+  compatibility, fallback will be better than crash
+- Add `{ delete: 'cascade' }` to generate `ON DELETE CASCADE` for `{ many }`
+- Implement `.returning(fields)` for `Query`
+- Methods `insert`, `delete` and `update` of `Database` returns instance of
+  `Modify` class with chain methods `.returning` and `.then`
+
+## [1.2.0][] - 2021-08-04
+
 - Add typings for Database and Query classes
+- Move types to package root
+- Generated `always as identity` just for `Registry`
+- Support `DEFAULT CURRENT_TIMESTAMP` for `datetime`
+- Generate SQL for bootstrapping db data
+- Pass `Model` to `Database` to access schemas
+- Use common `Console` interface for logging
+- Generate ids for `Registry` tables
 
 ## [1.1.5][] - 2021-07-04
 
@@ -71,7 +89,9 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.1.5...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/metarhia/metasql/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/metarhia/metasql/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/metarhia/metasql/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/metarhia/metasql/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/metarhia/metasql/compare/v1.1.2...v1.1.3
