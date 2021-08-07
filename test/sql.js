@@ -101,22 +101,25 @@ const metadomain = require('metadomain');
   });
 
   metatests.test('Database.insert/update/delete', async (test) => {
-    const res1 = await db.insert('City', { name: 'Odessa', countryId: 1 });
+    const res1 = await db
+      .insert('City', { name: 'Odessa', countryId: 1 })
+      .returning('cityId');
     test.strictEqual(res1.rowCount, 1);
-    const res2 = await db.update(
-      'City',
-      { name: 'ODESSA' },
-      { name: 'Odessa' }
-    );
+    test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
+    const res2 = await db
+      .update('City', { name: 'ODESSA' }, { name: 'Odessa' })
+      .returning(['cityId']);
     test.strictEqual(res2.rowCount, 1);
-    const res3 = await db.delete('City', { name: 'ODESSA' });
+    const res3 = await db.delete('City', { name: 'ODESSA' }).returning('*');
     test.strictEqual(res3.rowCount, 1);
     test.end();
   });
 
   metatests.test('Database.insert into registry', async (test) => {
-    const res1 = await db.insert('Unit', { name: 'Quality control' });
-    test.strictEqual(typeof res1.rows[0].lastval, 'string');
+    const res1 = await db
+      .insert('Unit', { name: 'Quality control' })
+      .returning('id');
+    test.strictEqual(typeof res1.rows[0].id, 'string');
     test.strictEqual(res1.rowCount, 1);
     test.end();
   });

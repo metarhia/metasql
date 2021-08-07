@@ -6,6 +6,8 @@
   compatibility, fallback will be better than crash
 - Add `{ delete: 'cascade' }` to generate `ON DELETE CASCADE` for `{ many }`
 - Implement `.returning(fields)` for `Query`
+- Methods `insert`, `delete` and `update` of `Database` returns instance of
+  `Modify` class with chain methods `.returning` and `.then`
 
 ## [1.2.0][] - 2021-08-04
 
