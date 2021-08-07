@@ -110,15 +110,19 @@ const metadomain = require('metadomain');
       .update('City', { name: 'ODESSA' }, { name: 'Odessa' })
       .returning(['cityId']);
     test.strictEqual(res2.rowCount, 1);
-    const res3 = await db
-      .upsert('City', { name: 'Odessa', countryId: 1 }, { name: 'ODESSA' })
-      .returning(['cityId']);
+    const res3 = await db.upsert(
+      'City',
+      { name: 'Odessa', countryId: 1 },
+      { name: 'ODESSA' }
+    );
     test.strictEqual(res3.rowCount, 1);
     const res4 = await db.delete('City', { name: 'Odessa' }).returning('*');
     test.strictEqual(res4.rowCount, 1);
-    const res5 = await db
-      .upsert('City', { name: 'Lao Cai', countryId: 3 }, { name: 'Lao Cai' })
-      .returning(['cityId']);
+    const res5 = await db.upsert(
+      'City',
+      { name: 'Lao Cai', countryId: 3 },
+      { name: 'Lao Cai' }
+    );
     test.strictEqual(res5.rowCount, 1);
     await db.delete('City', { name: 'Lao Cai' }).returning('*');
     test.end();

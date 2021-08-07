@@ -47,7 +47,11 @@ export class Database {
   ): Promise<object>;
   delete(table: string, ...conditions: Array<object>): Modify;
   update(table: string, delta: object, ...conditions: Array<object>): Modify;
-  upsert: (table: string, record: object, constraint: object) => Modify;
+  upsert: (
+    table: string,
+    record: object,
+    constraint: object
+  ) => Promise<QueryResult>;
   fields: (table: string) => Promise<Array<string>>;
   tables: () => Promise<Array<string>>;
   close(): void;
