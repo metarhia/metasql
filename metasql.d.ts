@@ -74,6 +74,10 @@ interface QueryObject {
 
 export class Modify {
   constructor(db: Database, sql: string, args: Array<string>);
+  onConflict(fields: string | Array<string>): {
+    doNothing(): Modify;
+    doUpdate(exclude?: string | Array<string>): Modify;
+  };
   returning(field: string | Array<string>): Modify;
   then(resolve: (rows: Array<object>) => void, reject: Function): void;
   toObject(): ModifyObject;
