@@ -6,6 +6,7 @@
   - async upsert(table, record, condition): Object
   - async fields(table): Array
   - async tables(): Array
+  - async count(table, condition): number
 
 ## [1.3.0][] - 2021-08-07
 
