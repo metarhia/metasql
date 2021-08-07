@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.3.0][] - 2021-08-07
+
 - Use `options.logger` and global `console` if no `options.console` for backward
   compatibility, fallback will be better than crash
 - Add `{ delete: 'cascade' }` to generate `ON DELETE CASCADE` for `{ many }`
@@ -82,7 +84,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/metarhia/metasql/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/metarhia/metasql/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/metarhia/metasql/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/metarhia/metasql/compare/v1.1.3...v1.1.4
