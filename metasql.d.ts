@@ -18,8 +18,7 @@ export class Database {
   console: Console;
   constructor(config: DatabaseConfig);
   query(sql: string, values: Array<string | number>): Promise<QueryResult>;
-  id(name: string): Promise<number>;
-  insert(table: string, record: object): Promise<QueryResult>;
+  insert(table: string, record: object): Modify;
   select(
     table: string,
     fields: Array<string>,
@@ -45,12 +44,8 @@ export class Database {
     fields: Array<string>,
     ...conditions: Array<object>
   ): Promise<object>;
-  delete(table: string, ...conditions: Array<object>): Promise<QueryResult>;
-  update(
-    table: string,
-    delta: object,
-    ...conditions: Array<object>
-  ): Promise<QueryResult>;
+  delete(table: string, ...conditions: Array<object>): Modify;
+  update(table: string, delta: object, ...conditions: Array<object>): Modify;
   close(): void;
 }
 
@@ -65,7 +60,6 @@ export class Query {
   desc(field: string | Array<string>): Query;
   limit(count: number): Query;
   offset(count: number): Query;
-  returning(fields: Array<string>): Query;
   then(resolve: (rows: Array<object>) => void, reject: Function): void;
   toObject(): QueryObject;
   static from(db: Database, metadata: QueryObject): Query;
@@ -75,5 +69,19 @@ interface QueryObject {
   table: string;
   fields: string | Array<string>;
   where?: Array<object>;
-  options?: Array<object>;
+  options: Array<object>;
+}
+
+export class Modify {
+  constructor(db: Database, sql: string, args: Array<string>);
+  returning(field: string | Array<string>): Modify;
+  then(resolve: (rows: Array<object>) => void, reject: Function): void;
+  toObject(): ModifyObject;
+  static from(db: Database, metadata: ModifyObject): Modify;
+}
+
+interface ModifyObject {
+  sql: string;
+  args: Array<string>;
+  options: Array<object>;
 }
