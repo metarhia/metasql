@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Generating SQL `Query` and `Modify` method `toString()`
+- Fix SQL generation for index and unique fields
 
 ## [1.4.0][] - 2021-08-09
 
