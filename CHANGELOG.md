@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Generating SQL `Query` and `Modify` method `toString()`
+
 ## [1.4.0][] - 2021-08-09
 
 - New API methods for Database `async count(table, condition): number`
