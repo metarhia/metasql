@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.5.0][] - 2021-08-10
+
 - Generating SQL `Query` and `Modify` method `toString()`
 - Fix SQL generation for index and unique fields
 
@@ -92,7 +94,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/metarhia/metasql/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/metarhia/metasql/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/metarhia/metasql/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/metarhia/metasql/compare/v1.1.5...v1.2.0
