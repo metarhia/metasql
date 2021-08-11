@@ -100,6 +100,23 @@ const metadomain = require('metadomain');
     test.end();
   });
 
+  metatests.test('Query.toString', async (test) => {
+    const query1 = db.select('City', ['*'], { name: 'Kiev' });
+    const sql1 = query1.toString();
+    const expected1 = 'SELECT * FROM "City" WHERE "name" = "Kiev"';
+    test.strictEqual(sql1, expected1);
+
+    const query2 = db.insert('City', { name: 'Odessa', countryId: 1 });
+    const sql2 = query2.toString();
+    const expected2 =
+      'INSERT ' +
+      'INTO "City" ("name", "countryId") ' +
+      'VALUES ("Odessa", "1")';
+    test.strictEqual(sql2, expected2);
+
+    test.end();
+  });
+
   metatests.test('Database.insert/update/delete/upsert', async (test) => {
     const res1 = await db
       .insert('City', { name: 'Odessa', countryId: 1 })
@@ -168,6 +185,14 @@ const metadomain = require('metadomain');
     test.strictEqual(typeof res, 'object');
     const key = 'Kiev';
     test.strictEqual(res[key], '1');
+    test.end();
+  });
+
+  metatests.test('Database.count', async (test) => {
+    const res1 = await db.count('Country');
+    test.strictEqual(res1, 4);
+    const res2 = await db.count('City', { name: 'Kiev' });
+    test.strictEqual(res2, 1);
     test.end();
   });
 })();

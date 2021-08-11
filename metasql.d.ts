@@ -69,6 +69,7 @@ export class Query {
   limit(count: number): Query;
   offset(count: number): Query;
   then(resolve: (rows: Array<object>) => void, reject: Function): void;
+  toString(): string;
   toObject(): QueryObject;
   static from(db: Database, metadata: QueryObject): Query;
 }
@@ -84,6 +85,7 @@ export class Modify {
   constructor(db: Database, sql: string, args: Array<string>);
   returning(field: string | Array<string>): Modify;
   then(resolve: (rows: Array<object>) => void, reject: Function): void;
+  toString(): string;
   toObject(): ModifyObject;
   static from(db: Database, metadata: ModifyObject): Modify;
 }

@@ -6,7 +6,16 @@
   - async upsert(table, record, condition): Object
   - async fields(table): Array
   - async tables(): Array
-  - async count(table, condition): number
+
+## [1.5.0][] - 2021-08-10
+
+- Generating SQL `Query` and `Modify` method `toString()`
+- Fix SQL generation for index and unique fields
+
+## [1.4.0][] - 2021-08-09
+
+- New API methods for Database `async count(table, condition): number`
+- Added support for functions in select (min, avg, count...)
 
 ## [1.3.0][] - 2021-08-07
 
@@ -90,7 +99,9 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.3.0...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/metarhia/metasql/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/metarhia/metasql/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/metarhia/metasql/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/metarhia/metasql/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/metarhia/metasql/compare/v1.1.4...v1.1.5
