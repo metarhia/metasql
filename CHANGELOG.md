@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Change plugin interface (wrap all methods to function)
+
 ## [1.5.0][] - 2021-08-10
 
 - Generating SQL `Query` and `Modify` method `toString()`
