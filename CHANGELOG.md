@@ -2,7 +2,11 @@
 
 ## [Unreleased][unreleased]
 
-- Change plugin interface (wrap all methods to function)
+## [2.0.0][] - 2021-08-19
+
+- Change plugin interface (wrap plugin to function). This changes in plugins
+  are not backward compatible, so major version will be incremented.
+- Update dependencies
 
 ## [1.5.0][] - 2021-08-10
 
@@ -96,7 +100,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v1.5.0...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/metarhia/metasql/compare/v1.5.0...v2.0.0
 [1.5.0]: https://github.com/metarhia/metasql/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/metarhia/metasql/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/metarhia/metasql/compare/v1.2.0...v1.3.0
