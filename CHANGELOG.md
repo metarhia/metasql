@@ -8,6 +8,11 @@
   - async tables(): Array
 
 
+## [2.0.1][] - 2021-09-10
+
+- Update dependencies
+
+
 ## [2.0.0][] - 2021-08-19
 
 - Change plugin interface (wrap plugin to function). This changes in plugins
@@ -107,7 +112,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v2.0.0...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/metarhia/metasql/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/metarhia/metasql/compare/v1.5.0...v2.0.0
 [1.5.0]: https://github.com/metarhia/metasql/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/metarhia/metasql/compare/v1.3.0...v1.4.0
