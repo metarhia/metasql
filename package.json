@@ -1,6 +1,6 @@
 {
   "name": "metasql",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "MetaSQL Database schema generator, migrations and query builder for Metarhia",
   "main": "metasql.js",
   "types": "metasql.d.ts",
@@ -43,7 +43,7 @@
     "pg": "^8.7.1"
   },
   "devDependencies": {
-    "@types/node": "^16.10.8",
+    "@types/node": "^16.10.9",
     "@types/pg": "^8.6.1",
     "eslint": "^7.31.0",
     "eslint-config-metarhia": "^7.0.1",
