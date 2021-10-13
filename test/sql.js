@@ -123,12 +123,20 @@ const metadomain = require('metadomain');
       .returning('cityId');
     test.strictEqual(res1.rowCount, 1);
     test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
+
     const res2 = await db
       .update('City', { name: 'ODESSA' }, { name: 'Odessa' })
       .returning(['cityId']);
     test.strictEqual(res2.rowCount, 1);
+
     const res3 = await db.delete('City', { name: 'ODESSA' }).returning('*');
     test.strictEqual(res3.rowCount, 1);
+
+    const res4 = await db
+      .update('City', { name: null }, { name: 'ODESSA' })
+      .returning('cityId');
+    test.strictEqual(res4.rowCount, 0);
+
     test.end();
   });
 
