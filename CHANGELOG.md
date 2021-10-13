@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Support `null` as value for `update`
+
 ## [2.0.1][] - 2021-09-10
 
 - Update dependencies
