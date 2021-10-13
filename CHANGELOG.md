@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [2.0.2][] - 2021-10-14
+
 - Support `null` as value for `update`
 - Fixed thenable chain in `db.select`
 
@@ -107,7 +109,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v2.0.1...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v2.0.2...HEAD
+[2.0.2]: https://github.com/metarhia/metasql/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/metarhia/metasql/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/metarhia/metasql/compare/v1.5.0...v2.0.0
 [1.5.0]: https://github.com/metarhia/metasql/compare/v1.4.0...v1.5.0
