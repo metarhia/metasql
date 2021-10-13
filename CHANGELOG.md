@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Support `null` as value for `update`
+- Fixed thenable chain in `db.select`
 
 ## [2.0.1][] - 2021-09-10
 
