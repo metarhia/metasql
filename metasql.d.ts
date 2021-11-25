@@ -60,7 +60,11 @@ export class Query {
   desc(field: string | Array<string>): Query;
   limit(count: number): Query;
   offset(count: number): Query;
-  then(resolve: (rows: Array<object>) => void, reject: Function): void;
+  then(
+    resolve?: (rows: Array<object>) => unknown,
+    reject?: Function
+  ): Promise<unknown>;
+  catch(reject?: Function): Promise<unknown>;
   toString(): string;
   toObject(): QueryObject;
   static from(db: Database, metadata: QueryObject): Query;

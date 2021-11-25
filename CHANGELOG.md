@@ -4,6 +4,9 @@
 
 - Allow `interval` field type
 - Allow falsy values in update
+- Capture relevant error stack trace
+- Add catch function to query execution
+- Make query execution properly then-able
 
 ## [2.0.2][] - 2021-10-14
 

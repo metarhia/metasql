@@ -34,6 +34,21 @@ const metadomain = require('metadomain');
     test.end();
   });
 
+  metatests.test('Database.query error', async (test) => {
+    try {
+      await db.query('INVALID SQL');
+      test.fail('Invalid query should throw an error');
+    } catch (error) {
+      test.assert(
+        error.stack.includes('test/sql.js'),
+        'Error stack should have query invocation file in it'
+      );
+      test.assert(error.dbStack, 'Original error stack should be preserved');
+    } finally {
+      test.end();
+    }
+  });
+
   metatests.test('Database.select', async (test) => {
     const res1 = await db.select('City', ['*'], { cityId: 3 });
     test.strictEqual(res1.length, 1);
@@ -45,6 +60,18 @@ const metadomain = require('metadomain');
     const { cityId, name } = res3[0];
     test.strictEqual(cityId, '1');
     test.strictEqual(name, 'Beijing');
+    test.end();
+  });
+
+  metatests.test('Database.select.then', async (test) => {
+    await db
+      .select('City', ['*'], { cityId: 3 })
+      .then((cities) => cities[0])
+      .then((city) => {
+        test.pass('Sequential then is called properly');
+        test.strictEqual(city, { cityId: '3', name: 'Kiev', countryId: '1' });
+      });
+
     test.end();
   });
 
