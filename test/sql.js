@@ -140,6 +140,23 @@ const metadomain = require('metadomain');
     test.end();
   });
 
+  metatests.test('Database.update with falsy value', async (test) => {
+    const {
+      rows: [{ cityId }],
+    } = await db
+      .insert('City', { name: 'Kharkiv', countryId: 1 })
+      .returning('cityId');
+
+    const {
+      rows: [{ name }],
+    } = await db.update('City', { name: '' }, { cityId }).returning(['name']);
+
+    test.strictEqual(name, '');
+
+    await db.delete('City', { cityId }).returning('*');
+    test.end();
+  });
+
   metatests.test('Database.insert into registry', async (test) => {
     const res1 = await db
       .insert('Unit', { name: 'Quality control' })
