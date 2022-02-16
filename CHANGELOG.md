@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Allow `interval` field type
+
 ## [2.0.2][] - 2021-10-14
 
 - Support `null` as value for `update`
