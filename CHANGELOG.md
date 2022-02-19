@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Allow falsy values in update
+- Allow `interval` field type
 
 ## [2.0.2][] - 2021-10-14
 
