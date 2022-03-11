@@ -163,7 +163,7 @@ const metadomain = require('metadomain');
     test.strictEqual(res2.rowCount, 1);
 
     const res3 = await db.select('City', { name: 'ODESSA' });
-    test.contains(res3[0], { name: 'ODESSA', countryId: 1 });
+    test.contains(res3[0], { name: 'ODESSA', countryId: '1' });
 
     const res4 = await db.delete('City', { name: 'ODESSA' }).returning('*');
     test.strictEqual(res4.rowCount, 1);
