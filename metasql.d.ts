@@ -24,6 +24,7 @@ export class Database {
     fields: Array<string>,
     ...conditions: Array<object>
   ): Query;
+  select(table: string, ...conditions: Array<object>): Query;
   row(
     table: string,
     fields: Array<string>,

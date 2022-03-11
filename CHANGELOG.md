@@ -7,6 +7,9 @@
 - Capture relevant error stack trace
 - Add catch function to query execution
 - Make query execution properly then-able
+- Fix `undefined` use in insert/update/conditions,
+  keys with `undefined` value will no longer result
+  in `null` and will just be ignored
 
 ## [2.0.2][] - 2021-10-14
 

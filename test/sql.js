@@ -60,6 +60,8 @@ const metadomain = require('metadomain');
     const { cityId, name } = res3[0];
     test.strictEqual(cityId, '1');
     test.strictEqual(name, 'Beijing');
+    const res4 = await db.select('City', { cityId: '3', name: undefined });
+    test.strictEqual(res4[0], { cityId: '3', name: 'Kiev', countryId: '1' });
     test.end();
   });
 
@@ -152,17 +154,24 @@ const metadomain = require('metadomain');
     test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
 
     const res2 = await db
-      .update('City', { name: 'ODESSA' }, { name: 'Odessa' })
+      .update(
+        'City',
+        { name: 'ODESSA', countryId: undefined },
+        { name: 'Odessa', cityId: undefined }
+      )
       .returning(['cityId']);
     test.strictEqual(res2.rowCount, 1);
 
-    const res3 = await db.delete('City', { name: 'ODESSA' }).returning('*');
-    test.strictEqual(res3.rowCount, 1);
+    const res3 = await db.select('City', { name: 'ODESSA' });
+    test.contains(res3[0], { name: 'ODESSA', countryId: 1 });
 
-    const res4 = await db
+    const res4 = await db.delete('City', { name: 'ODESSA' }).returning('*');
+    test.strictEqual(res4.rowCount, 1);
+
+    const res5 = await db
       .update('City', { name: null }, { name: 'ODESSA' })
       .returning('cityId');
-    test.strictEqual(res4.rowCount, 0);
+    test.strictEqual(res5.rowCount, 0);
 
     test.end();
   });
