@@ -10,6 +10,7 @@
 - Fix `undefined` use in insert/update/conditions,
   keys with `undefined` value will no longer result
   in `null` and will just be ignored
+- Fix working with nested schemas for databases
 
 ## [2.0.2][] - 2021-10-14
 
