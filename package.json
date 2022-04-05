@@ -36,6 +36,9 @@
     "url": "https://github.com/metarhia/metasql/issues"
   },
   "homepage": "https://github.com/metarhia/metasql#readme",
+  "engines": {
+    "node": "^12.9 || 14 || 16 || 17"
+  },
   "dependencies": {
     "metadomain": "^1.0.6",
     "metaschema": "^1.4.1",
