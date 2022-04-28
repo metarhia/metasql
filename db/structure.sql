@@ -106,6 +106,13 @@ CREATE TABLE "Country" (
 
 ALTER TABLE "Country" ADD CONSTRAINT "pkCountry" PRIMARY KEY ("countryId");
 
+CREATE TABLE "Counter" (
+  "counterId" bigint generated always as identity,
+  "value" bigint NOT NULL
+);
+
+ALTER TABLE "Counter" ADD CONSTRAINT "pkCounter" PRIMARY KEY ("counterId");
+
 CREATE TABLE "City" (
   "cityId" bigint generated always as identity,
   "name" varchar NOT NULL,
