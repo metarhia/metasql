@@ -235,4 +235,26 @@ const metadomain = require('metadomain');
     test.strictEqual(res2, 1);
     test.end();
   });
+
+  metatests.test(
+    'Database.update/select/delete with 0 integer',
+    async (test) => {
+      const {
+        rows: [{ counterId }],
+      } = await db.insert('Counter', { value: 1 }).returning('counterId');
+
+      const {
+        rows: [{ value }],
+      } = await db
+        .update('Counter', { value: 0 }, { counterId })
+        .returning('value');
+      test.strictEqual(value, '0');
+
+      const [res] = await db.select('Counter', ['value'], { counterId });
+      test.strictEqual(res.value, value);
+
+      await db.delete('Counter', { counterId });
+      test.end();
+    }
+  );
 })();
