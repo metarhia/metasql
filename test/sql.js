@@ -146,52 +146,51 @@ const metadomain = require('metadomain');
     test.end();
   });
 
-  metatests.test('Database.insert/update/delete', async (test) => {
-    const res1 = await db
-      .insert('City', { name: 'Odessa', countryId: 1 })
-      .returning('cityId');
-    test.strictEqual(res1.rowCount, 1);
-    test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
+  metatests.test(
+    'Database.insert/update/delete: Normal and falsy values',
+    async (test) => {
+      const res1 = await db
+        .insert('City', { name: 'Odessa', countryId: 1 })
+        .returning('cityId');
+      test.strictEqual(res1.rowCount, 1);
+      test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
 
-    const res2 = await db
-      .update(
-        'City',
-        { name: 'ODESSA', countryId: undefined },
-        { name: 'Odessa', cityId: undefined }
-      )
-      .returning(['cityId']);
-    test.strictEqual(res2.rowCount, 1);
+      const res2 = await db
+        .update(
+          'City',
+          { name: 'ODESSA', countryId: undefined },
+          { name: 'Odessa', cityId: undefined }
+        )
+        .returning(['cityId']);
+      test.strictEqual(res2.rowCount, 1);
 
-    const res3 = await db.select('City', { name: 'ODESSA' });
-    test.contains(res3[0], { name: 'ODESSA', countryId: '1' });
+      const res3 = await db.select('City', { name: 'ODESSA' });
+      test.contains(res3[0], { name: 'ODESSA', countryId: '1' });
 
-    const res4 = await db.delete('City', { name: 'ODESSA' }).returning('*');
-    test.strictEqual(res4.rowCount, 1);
+      const res4 = await db.delete('City', { name: 'ODESSA' }).returning('*');
+      test.strictEqual(res4.rowCount, 1);
 
-    const res5 = await db
-      .update('City', { name: null }, { name: 'ODESSA' })
-      .returning('cityId');
-    test.strictEqual(res5.rowCount, 0);
+      const res5 = await db
+        .update('City', { name: null }, { name: 'ODESSA' })
+        .returning('cityId');
+      test.strictEqual(res5.rowCount, 0);
 
-    test.end();
-  });
+      const {
+        rows: [{ cityId }],
+      } = await db
+        .insert('City', { name: 'Kharkiv', countryId: 1 })
+        .returning('cityId');
 
-  metatests.test('Database.update with falsy value', async (test) => {
-    const {
-      rows: [{ cityId }],
-    } = await db
-      .insert('City', { name: 'Kharkiv', countryId: 1 })
-      .returning('cityId');
+      const {
+        rows: [{ name }],
+      } = await db.update('City', { name: '' }, { cityId }).returning(['name']);
 
-    const {
-      rows: [{ name }],
-    } = await db.update('City', { name: '' }, { cityId }).returning(['name']);
+      test.strictEqual(name, '');
 
-    test.strictEqual(name, '');
-
-    await db.delete('City', { cityId }).returning('*');
-    test.end();
-  });
+      await db.delete('City', { cityId }).returning('*');
+      test.end();
+    }
+  );
 
   metatests.test('Database.insert into registry', async (test) => {
     const res1 = await db
