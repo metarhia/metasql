@@ -63,7 +63,7 @@ export class Query {
   offset(count: number): Query;
   then(
     resolve?: (rows: Array<object>) => unknown,
-    reject?: Function
+    reject?: Function,
   ): Promise<unknown>;
   catch(reject?: Function): Promise<unknown>;
   toString(): string;

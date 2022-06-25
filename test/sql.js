@@ -41,7 +41,7 @@ const metadomain = require('metadomain');
     } catch (error) {
       test.assert(
         error.stack.includes('test/sql.js'),
-        'Error stack should have query invocation file in it'
+        'Error stack should have query invocation file in it',
       );
       test.assert(error.dbStack, 'Original error stack should be preserved');
     } finally {
@@ -159,7 +159,7 @@ const metadomain = require('metadomain');
         .update(
           'City',
           { name: 'ODESSA', countryId: undefined },
-          { name: 'Odessa', cityId: undefined }
+          { name: 'Odessa', cityId: undefined },
         )
         .returning(['cityId']);
       test.strictEqual(res2.rowCount, 1);
@@ -189,7 +189,7 @@ const metadomain = require('metadomain');
 
       await db.delete('City', { cityId }).returning('*');
       test.end();
-    }
+    },
   );
 
   metatests.test('Database.insert into registry', async (test) => {
@@ -254,6 +254,6 @@ const metadomain = require('metadomain');
 
       await db.delete('Counter', { counterId });
       test.end();
-    }
+    },
   );
 })();
