@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "metadomain": "^1.0.9",
-    "metaschema": "^2.0.2",
+    "metaschema": "^2.1.0",
     "metavm": "^1.1.0",
     "pg": "^8.7.3"
   },

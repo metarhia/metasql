@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [2.0.5][] - 2022-07-11
+
+- Update metaschema to 2.1.0
+
+## [2.0.4][] - 2022-06-25
+
 - Allow `interval` field type
 - Allow falsy values in update
 - Capture relevant error stack trace
