@@ -13,6 +13,8 @@ access layer library for DDL generation from
 [metaschema](https://github.com/metarhia/metaschema), data validation,
 migrations auto generation, queries and introspection.
 
-## Contributors
+## License & Contributors
 
-See github for [contributors list](https://github.com/metarhia/metasql/graphs/contributors)
+Copyright (c) 2019-2022 [Metarhia contributors](https://github.com/metarhia/metasql/graphs/contributors).
+Metasql is [MIT licensed](./LICENSE).\
+Metasql is a part of [Metarhia](https://github.com/metarhia) technology stack.
