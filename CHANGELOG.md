@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Using optional chaining operator
+
 ## [2.0.5][] - 2022-07-11
 
 - Update metaschema to 2.1.0
