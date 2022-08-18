@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [2.1.0][] - 2022-08-18
+
 - Using optional chaining operator
 - Update crud plugin to work wit the impress application sandbox
 
@@ -128,7 +130,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v2.0.2...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/metarhia/metasql/compare/v2.0.5...v2.1.0
 [2.0.5]: https://github.com/metarhia/metasql/compare/v2.0.4...v2.0.5
 [2.0.4]: https://github.com/metarhia/metasql/compare/v2.0.2...v2.0.4
 [2.0.2]: https://github.com/metarhia/metasql/compare/v2.0.1...v2.0.2
