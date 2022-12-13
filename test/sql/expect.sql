@@ -14,6 +14,7 @@ ALTER TABLE "Identifier" ADD CONSTRAINT "pkIdentifier" PRIMARY KEY ("id");
 ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierCategory" FOREIGN KEY ("categoryId") REFERENCES "Identifier" ("id");
 CREATE INDEX "idxIdentifierStorage" ON "Identifier" ("storage");
 CREATE INDEX "idxIdentifierStatus" ON "Identifier" ("status");
+
 CREATE TABLE "Unit" (
   "id" bigint NOT NULL,
   "name" varchar NOT NULL,
@@ -24,6 +25,7 @@ ALTER TABLE "Unit" ADD CONSTRAINT "pkUnit" PRIMARY KEY ("id");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 CREATE UNIQUE INDEX "akUnitName" ON "Unit" ("name");
 ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitParent" FOREIGN KEY ("parentId") REFERENCES "Unit" ("id");
+
 CREATE TABLE "Role" (
   "roleId" bigint generated always as identity,
   "name" varchar NOT NULL,
@@ -34,6 +36,7 @@ CREATE TABLE "Role" (
 ALTER TABLE "Role" ADD CONSTRAINT "pkRole" PRIMARY KEY ("roleId");
 CREATE UNIQUE INDEX "akRoleName" ON "Role" ("name");
 ALTER TABLE "Role" ADD CONSTRAINT "fkRoleUnit" FOREIGN KEY ("unitId") REFERENCES "Unit" ("id") ON DELETE RESTRICT;
+
 CREATE TABLE "Account" (
   "id" bigint NOT NULL,
   "login" varchar(64) NOT NULL,
@@ -69,6 +72,7 @@ CREATE TABLE "AccountRole" (
 ALTER TABLE "AccountRole" ADD CONSTRAINT "pkAccountRole" PRIMARY KEY ("accountId", "roleId");
 ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("id") ON DELETE CASCADE;
 ALTER TABLE "AccountRole" ADD CONSTRAINT "fkAccountRoleRole" FOREIGN KEY ("roleId") REFERENCES "Role" ("roleId") ON DELETE CASCADE;
+
 CREATE TABLE "Catalog" (
   "id" bigint NOT NULL,
   "parentId" bigint NULL,
@@ -89,6 +93,7 @@ ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "pkCatalogIdentifier" PRIMARY KEY
 ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierCatalog" FOREIGN KEY ("catalogId") REFERENCES "Catalog" ("id") ON DELETE CASCADE;
 ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("id") ON DELETE CASCADE;
 CREATE UNIQUE INDEX "akCatalogNaturalKey" ON "Catalog" ("parentId", "name");
+
 CREATE TABLE "Category" (
   "id" bigint NOT NULL,
   "name" varchar NOT NULL,
@@ -101,6 +106,7 @@ CREATE TABLE "Category" (
 ALTER TABLE "Category" ADD CONSTRAINT "pkCategory" PRIMARY KEY ("id");
 ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 CREATE UNIQUE INDEX "akCategoryName" ON "Category" ("name");
+
 CREATE TABLE "Config" (
   "configId" bigint generated always as identity,
   "name" varchar NOT NULL,
@@ -109,6 +115,7 @@ CREATE TABLE "Config" (
 
 ALTER TABLE "Config" ADD CONSTRAINT "pkConfig" PRIMARY KEY ("configId");
 CREATE UNIQUE INDEX "akConfigName" ON "Config" ("name");
+
 CREATE TABLE "Session" (
   "sessionId" bigint generated always as identity,
   "accountId" bigint NOT NULL,
@@ -120,6 +127,7 @@ CREATE TABLE "Session" (
 ALTER TABLE "Session" ADD CONSTRAINT "pkSession" PRIMARY KEY ("sessionId");
 ALTER TABLE "Session" ADD CONSTRAINT "fkSessionAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("id") ON DELETE CASCADE;
 CREATE UNIQUE INDEX "akSessionToken" ON "Session" ("token");
+
 CREATE TABLE "Cursor" (
   "cursorId" bigint generated always as identity,
   "sessionId" bigint NOT NULL,
@@ -131,6 +139,7 @@ CREATE TABLE "Cursor" (
 
 ALTER TABLE "Cursor" ADD CONSTRAINT "pkCursor" PRIMARY KEY ("cursorId");
 ALTER TABLE "Cursor" ADD CONSTRAINT "fkCursorSession" FOREIGN KEY ("sessionId") REFERENCES "Session" ("sessionId") ON DELETE CASCADE;
+
 CREATE TABLE "Field" (
   "id" bigint NOT NULL,
   "categoryId" bigint NOT NULL,
@@ -141,6 +150,7 @@ ALTER TABLE "Field" ADD CONSTRAINT "pkField" PRIMARY KEY ("id");
 ALTER TABLE "Field" ADD CONSTRAINT "fkFieldId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 ALTER TABLE "Field" ADD CONSTRAINT "fkFieldCategory" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id") ON DELETE CASCADE;
 CREATE UNIQUE INDEX "akFieldNaturalKey" ON "Field" ("categoryId", "name");
+
 CREATE TABLE "File" (
   "id" bigint NOT NULL,
   "filename" varchar NOT NULL,
@@ -158,6 +168,7 @@ ALTER TABLE "File" ADD CONSTRAINT "pkFile" PRIMARY KEY ("id");
 ALTER TABLE "File" ADD CONSTRAINT "fkFileId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 CREATE INDEX "idxFileFilename" ON "File" ("filename");
 CREATE INDEX "idxFileCrc32" ON "File" ("crc32");
+
 CREATE TABLE "Server" (
   "id" bigint NOT NULL,
   "name" varchar NOT NULL,
@@ -172,6 +183,7 @@ ALTER TABLE "Server" ADD CONSTRAINT "fkServerId" FOREIGN KEY ("id") REFERENCES "
 CREATE UNIQUE INDEX "akServerName" ON "Server" ("name");
 CREATE UNIQUE INDEX "akServerSuffix" ON "Server" ("suffix");
 CREATE UNIQUE INDEX "akServerIp" ON "Server" ("ip");
+
 CREATE TABLE "Journal" (
   "journalId" bigint generated always as identity,
   "identifierId" bigint NOT NULL,
@@ -187,6 +199,7 @@ ALTER TABLE "Journal" ADD CONSTRAINT "pkJournal" PRIMARY KEY ("journalId");
 ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalIdentifier" FOREIGN KEY ("identifierId") REFERENCES "Identifier" ("id");
 ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("id");
 ALTER TABLE "Journal" ADD CONSTRAINT "fkJournalServer" FOREIGN KEY ("serverId") REFERENCES "Server" ("id");
+
 CREATE TABLE "Locking" (
   "lockingId" bigint generated always as identity,
   "identifierId" bigint NOT NULL,
@@ -203,6 +216,7 @@ ALTER TABLE "Locking" ADD CONSTRAINT "fkLockingSession" FOREIGN KEY ("sessionId"
 CREATE INDEX "idxLockingRequest" ON "Locking" ("request");
 CREATE INDEX "idxLockingStart" ON "Locking" ("start");
 CREATE INDEX "idxLockingExpire" ON "Locking" ("expire");
+
 CREATE TABLE "Permission" (
   "permissionId" bigint generated always as identity,
   "roleId" bigint NOT NULL,
