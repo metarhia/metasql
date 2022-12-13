@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Add empty line separator in SQL create script
+
 ## [2.1.0][] - 2022-08-18
 
 - Using optional chaining operator
