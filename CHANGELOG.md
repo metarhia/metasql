@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 - Add empty line separator in SQL create script
+- Run CI for node.js 14, 16, 18, 19 with postgres
 
 ## [2.1.0][] - 2022-08-18
 

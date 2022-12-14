@@ -5,7 +5,16 @@ on: pull_request
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: node:14-alpine
+    container: node:${{ matrix.node }}-alpine
+
+    strategy:
+      matrix:
+        node:
+          - 14
+          - 16
+          - 18
+          - 19
+
     services:
       postgres:
         image: postgres
@@ -15,9 +24,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
       - uses: actions/cache@v2
         with:
           path: ~/.npm
