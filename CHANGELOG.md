@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [2.1.1][] - 2022-12-14
+
 - Add empty line separator in SQL create script
 - Run CI for node.js 14, 16, 18, 19 with postgres
 
@@ -133,7 +135,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/metarhia/metasql/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/metarhia/metasql/compare/v2.0.5...v2.1.0
 [2.0.5]: https://github.com/metarhia/metasql/compare/v2.0.4...v2.0.5
 [2.0.4]: https://github.com/metarhia/metasql/compare/v2.0.2...v2.0.4
