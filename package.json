@@ -43,7 +43,7 @@
     "metadomain": "^1.0.9",
     "metaschema": "^2.1.1",
     "metavm": "^1.2.2",
-    "pg": "^8.8.0"
+    "pg": "^8.9.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.15",
