@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [2.1.3][] - 2023-02-19
+
+- Update dependencies
+- Add `node:` prefix in require for built-in modules
+
 ## [2.1.2][] - 2022-12-14
 
 - Add empty line separator in SQL create script
@@ -136,7 +141,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v2.1.2...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v2.1.3...HEAD
+[2.1.3]: https://github.com/metarhia/metasql/compare/v2.1.1...v2.1.3
 [2.1.2]: https://github.com/metarhia/metasql/compare/v2.1.0...v2.1.2
 [2.1.0]: https://github.com/metarhia/metasql/compare/v2.0.5...v2.1.0
 [2.0.5]: https://github.com/metarhia/metasql/compare/v2.0.4...v2.0.5
