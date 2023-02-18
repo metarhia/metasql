@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
 const metasql = require('..');
 
 const [, , command, version] = process.argv;
