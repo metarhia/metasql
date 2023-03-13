@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+## [2.1.4][] - 2023-03-14
+
+- Update dependencies and package maintenance
+
 ## [2.1.3][] - 2023-02-19
 
 - Update dependencies
@@ -141,8 +145,9 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v2.1.3...HEAD
-[2.1.3]: https://github.com/metarhia/metasql/compare/v2.1.1...v2.1.3
+[unreleased]: https://github.com/metarhia/metasql/compare/v2.1.4...HEAD
+[2.1.4]: https://github.com/metarhia/metasql/compare/v2.1.3...v2.1.4
+[2.1.3]: https://github.com/metarhia/metasql/compare/v2.1.2...v2.1.3
 [2.1.2]: https://github.com/metarhia/metasql/compare/v2.1.0...v2.1.2
 [2.1.0]: https://github.com/metarhia/metasql/compare/v2.0.5...v2.1.0
 [2.0.5]: https://github.com/metarhia/metasql/compare/v2.0.4...v2.0.5
