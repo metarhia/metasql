@@ -1,61 +1,59 @@
 CREATE TABLE "Identifier" (
   "id" bigint generated always as identity,
-  "categoryId" bigint NULL,
+  "entityId" bigint NULL,
   "storage" varchar NOT NULL DEFAULT 'master',
   "status" varchar NOT NULL DEFAULT 'actual',
   "creation" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "change" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "lock" boolean NOT NULL DEFAULT false,
+  "locked" boolean NOT NULL DEFAULT false,
   "version" integer NOT NULL DEFAULT 0,
   "hashsum" varchar NOT NULL DEFAULT ''
 );
 
 ALTER TABLE "Identifier" ADD CONSTRAINT "pkIdentifier" PRIMARY KEY ("id");
-ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierCategory" FOREIGN KEY ("categoryId") REFERENCES "Identifier" ("id");
+ALTER TABLE "Identifier" ADD CONSTRAINT "fkIdentifierEntity" FOREIGN KEY ("entityId") REFERENCES "Identifier" ("id");
 
-CREATE TABLE "Unit" (
+CREATE TABLE "Division" (
   "id" bigint NOT NULL,
   "name" varchar NOT NULL,
   "parentId" bigint NULL
 );
 
-ALTER TABLE "Unit" ADD CONSTRAINT "pkUnit" PRIMARY KEY ("id");
-ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
-ALTER TABLE "Unit" ADD CONSTRAINT "fkUnitParent" FOREIGN KEY ("parentId") REFERENCES "Unit" ("id");
+ALTER TABLE "Division" ADD CONSTRAINT "pkDivision" PRIMARY KEY ("id");
+ALTER TABLE "Division" ADD CONSTRAINT "fkDivisionId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Division" ADD CONSTRAINT "fkDivisionParent" FOREIGN KEY ("parentId") REFERENCES "Division" ("id");
 
 CREATE TABLE "Role" (
   "roleId" bigint generated always as identity,
   "name" varchar NOT NULL,
   "active" boolean NOT NULL DEFAULT true,
-  "unitId" bigint NOT NULL
+  "divisionId" bigint NOT NULL
 );
 
 ALTER TABLE "Role" ADD CONSTRAINT "pkRole" PRIMARY KEY ("roleId");
-ALTER TABLE "Role" ADD CONSTRAINT "fkRoleUnit" FOREIGN KEY ("unitId") REFERENCES "Unit" ("id");
+ALTER TABLE "Role" ADD CONSTRAINT "fkRoleDivision" FOREIGN KEY ("divisionId") REFERENCES "Division" ("id");
 
 CREATE TABLE "Account" (
   "id" bigint NOT NULL,
   "login" varchar(64) NOT NULL,
   "password" varchar NOT NULL,
   "active" boolean NOT NULL DEFAULT true,
-  "email" varchar(255) NOT NULL,
-  "phone" varchar(15) NOT NULL,
-  "fullNameGiven" varchar NULL,
-  "fullNameMiddle" varchar NULL,
-  "fullNameSurname" varchar NULL
+  "fullName" varchar NULL,
+  "email" varchar(255) NULL,
+  "phone" varchar(15) NULL
 );
 
 ALTER TABLE "Account" ADD CONSTRAINT "pkAccount" PRIMARY KEY ("id");
 ALTER TABLE "Account" ADD CONSTRAINT "fkAccountId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 
-CREATE TABLE "AccountUnit" (
+CREATE TABLE "AccountDivision" (
   "accountId" bigint NOT NULL,
-  "unitId" bigint NOT NULL
+  "divisionId" bigint NOT NULL
 );
 
-ALTER TABLE "AccountUnit" ADD CONSTRAINT "pkAccountUnit" PRIMARY KEY ("accountId", "unitId");
-ALTER TABLE "AccountUnit" ADD CONSTRAINT "fkAccountUnitAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("id");
-ALTER TABLE "AccountUnit" ADD CONSTRAINT "fkAccountUnitUnit" FOREIGN KEY ("unitId") REFERENCES "Unit" ("id");
+ALTER TABLE "AccountDivision" ADD CONSTRAINT "pkAccountDivision" PRIMARY KEY ("accountId", "divisionId");
+ALTER TABLE "AccountDivision" ADD CONSTRAINT "fkAccountDivisionAccount" FOREIGN KEY ("accountId") REFERENCES "Account" ("id");
+ALTER TABLE "AccountDivision" ADD CONSTRAINT "fkAccountDivisionDivision" FOREIGN KEY ("divisionId") REFERENCES "Division" ("id");
 
 CREATE TABLE "AccountRole" (
   "accountId" bigint NOT NULL,
@@ -87,7 +85,7 @@ ALTER TABLE "CatalogIdentifier" ADD CONSTRAINT "fkCatalogIdentifierIdentifier" F
 
 CREATE UNIQUE INDEX "akCatalogNaturalKey" ON "Catalog" ("parentId", "name");
 
-CREATE TABLE "Category" (
+CREATE TABLE "Entity" (
   "id" bigint NOT NULL,
   "name" varchar NOT NULL,
   "kind" varchar NOT NULL DEFAULT 'entity',
@@ -96,8 +94,8 @@ CREATE TABLE "Category" (
   "allow" varchar NOT NULL DEFAULT 'write'
 );
 
-ALTER TABLE "Category" ADD CONSTRAINT "pkCategory" PRIMARY KEY ("id");
-ALTER TABLE "Category" ADD CONSTRAINT "fkCategoryId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
+ALTER TABLE "Entity" ADD CONSTRAINT "pkEntity" PRIMARY KEY ("id");
+ALTER TABLE "Entity" ADD CONSTRAINT "fkEntityId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
 
 CREATE TABLE "Country" (
   "countryId" bigint generated always as identity,
@@ -155,15 +153,15 @@ ALTER TABLE "Cursor" ADD CONSTRAINT "fkCursorSession" FOREIGN KEY ("sessionId") 
 
 CREATE TABLE "Field" (
   "id" bigint NOT NULL,
-  "categoryId" bigint NOT NULL,
+  "entityId" bigint NOT NULL,
   "name" varchar NOT NULL
 );
 
 ALTER TABLE "Field" ADD CONSTRAINT "pkField" PRIMARY KEY ("id");
 ALTER TABLE "Field" ADD CONSTRAINT "fkFieldId" FOREIGN KEY ("id") REFERENCES "Identifier" ("id");
-ALTER TABLE "Field" ADD CONSTRAINT "fkFieldCategory" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id");
+ALTER TABLE "Field" ADD CONSTRAINT "fkFieldEntity" FOREIGN KEY ("entityId") REFERENCES "Entity" ("id");
 
-CREATE UNIQUE INDEX "akFieldNaturalKey" ON "Field" ("categoryId", "name");
+CREATE UNIQUE INDEX "akFieldNaturalKey" ON "Field" ("entityId", "name");
 
 CREATE TABLE "File" (
   "id" bigint NOT NULL,
@@ -237,279 +235,279 @@ ALTER TABLE "Permission" ADD CONSTRAINT "fkPermissionIdentifier" FOREIGN KEY ("i
 CREATE UNIQUE INDEX "akPermissionNaturalKey" ON "Permission" ("roleId", "identifierId");
 
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Identifier', 'entity');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Identifier', 'entity');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Identifier'), 'category');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier'), 'entity');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Identifier'), 'storage');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier'), 'storage');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Identifier'), 'status');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier'), 'status');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Identifier'), 'creation');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier'), 'creation');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Identifier'), 'change');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier'), 'change');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Identifier'), 'lock');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier'), 'locked');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Identifier'), 'version');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier'), 'version');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Identifier'), 'hashsum');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier'), 'hashsum');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Unit', 'registry');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Division', 'registry');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Unit'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Division'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Unit'), 'parent');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Division'), 'parent');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Role', 'entity');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Role', 'entity');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Role'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Role'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Role'), 'active');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Role'), 'active');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Role'), 'unit');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Role'), 'division');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Account', 'registry');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Account', 'registry');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Account'), 'login');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Account'), 'login');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Account'), 'password');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Account'), 'password');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Account'), 'active');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Account'), 'active');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Account'), 'email');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Account'), 'email');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Account'), 'phone');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Account'), 'phone');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Account'), 'fullNameGiven');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Account'), 'fullNameGiven');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Account'), 'fullNameMiddle');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Account'), 'fullNameMiddle');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Account'), 'fullNameSurname');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Account'), 'fullNameSurname');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Catalog', 'registry');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Catalog', 'registry');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Catalog'), 'parent');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Catalog'), 'parent');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Catalog'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Catalog'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Category', 'registry');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Entity', 'registry');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Category'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Entity'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Category'), 'kind');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Entity'), 'kind');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Category'), 'scope');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Entity'), 'scope');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Category'), 'store');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Entity'), 'store');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Category'), 'allow');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Entity'), 'allow');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Country', 'entity');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Country', 'entity');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Country'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Country'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'City', 'entity');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'City', 'entity');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'City'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'City'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'City'), 'country');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'City'), 'country');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Config', 'entity');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Config', 'entity');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Config'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Config'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Config'), 'data');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Config'), 'data');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Session', 'details');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Session', 'details');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Session'), 'account');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Session'), 'account');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Session'), 'token');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Session'), 'token');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Session'), 'ip');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Session'), 'ip');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Session'), 'data');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Session'), 'data');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Cursor', 'details');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Cursor', 'details');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Cursor'), 'session');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor'), 'session');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Cursor'), 'hashsum');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor'), 'hashsum');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Cursor'), 'created');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor'), 'created');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Cursor'), 'query');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor'), 'query');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Cursor'), 'version');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor'), 'version');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Field', 'registry');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Field', 'registry');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Field'), 'category');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Field'), 'entity');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Field'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Field'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'File', 'registry');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'File', 'registry');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'filename');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'filename');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'crc32');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'crc32');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'hashsum');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'hashsum');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'size');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'size');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'mediaType');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'mediaType');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'accessLast');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'accessLast');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'accessCount');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'accessCount');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'compressionFormat');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'compressionFormat');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'compressionSize');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'compressionSize');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'File'), 'compressionRatio');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'File'), 'compressionRatio');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Server', 'registry');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Server', 'registry');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Server'), 'name');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Server'), 'name');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Server'), 'suffix');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Server'), 'suffix');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Server'), 'ip');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Server'), 'ip');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Server'), 'kind');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Server'), 'kind');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Server'), 'ports');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Server'), 'ports');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Journal', 'journal');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Journal', 'journal');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Journal'), 'identifier');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Journal'), 'identifier');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Journal'), 'account');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Journal'), 'account');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Journal'), 'server');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Journal'), 'server');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Journal'), 'action');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Journal'), 'action');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Journal'), 'dateTime');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Journal'), 'dateTime');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Journal'), 'ip');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Journal'), 'ip');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Journal'), 'details');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Journal'), 'details');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Locking', 'details');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Locking', 'details');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Locking'), 'identifier');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Locking'), 'identifier');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Locking'), 'session');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Locking'), 'session');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Locking'), 'request');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Locking'), 'request');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Locking'), 'start');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Locking'), 'start');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Locking'), 'expire');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Locking'), 'expire');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Locking'), 'updates');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Locking'), 'updates');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Category" ("id", "name", "kind") VALUES (lastval(), 'Permission', 'relation');
+INSERT INTO "Entity" ("id", "name", "kind") VALUES (lastval(), 'Permission', 'relation');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Permission'), 'role');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Permission'), 'role');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Permission'), 'identifier');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Permission'), 'identifier');
 INSERT INTO "Identifier" DEFAULT VALUES;
-INSERT INTO "Field" ("id", "categoryId", "name") VALUES (lastval(), (SELECT "id" FROM "Category" WHERE "name" = 'Permission'), 'action');
+INSERT INTO "Field" ("id", "entityId", "name") VALUES (lastval(), (SELECT "id" FROM "Entity" WHERE "name" = 'Permission'), 'action');
 
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier') AND "name" = 'category');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier') AND "name" = 'storage');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier') AND "name" = 'status');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier') AND "name" = 'creation');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier') AND "name" = 'change');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier') AND "name" = 'lock');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier') AND "name" = 'version');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Identifier') AND "name" = 'hashsum');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Unit');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Unit') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Unit') AND "name" = 'parent');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Role');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Role') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Role') AND "name" = 'active');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Role') AND "name" = 'unit');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Account');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Account') AND "name" = 'login');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Account') AND "name" = 'password');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Account') AND "name" = 'active');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Account') AND "name" = 'email');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Account') AND "name" = 'phone');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Account') AND "name" = 'fullNameGiven');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Account') AND "name" = 'fullNameMiddle');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Account') AND "name" = 'fullNameSurname');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Catalog');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Catalog') AND "name" = 'parent');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Catalog') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Category');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') AND "name" = 'kind');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') AND "name" = 'scope');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') AND "name" = 'store');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') AND "name" = 'allow');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Country');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Country') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'City');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'City') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'City') AND "name" = 'country');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Config');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Config') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Config') AND "name" = 'data');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Session');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Session') AND "name" = 'account');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Session') AND "name" = 'token');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Session') AND "name" = 'ip');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Session') AND "name" = 'data');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Cursor');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Cursor') AND "name" = 'session');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Cursor') AND "name" = 'hashsum');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Cursor') AND "name" = 'created');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Cursor') AND "name" = 'query');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Cursor') AND "name" = 'version');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Field');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') AND "name" = 'category');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'File');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'filename');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'crc32');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'hashsum');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'size');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'mediaType');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'accessLast');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'accessCount');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'compressionFormat');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'compressionSize');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'File') AND "name" = 'compressionRatio');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Server');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Server') AND "name" = 'name');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Server') AND "name" = 'suffix');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Server') AND "name" = 'ip');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Server') AND "name" = 'kind');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Server') AND "name" = 'ports');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Journal');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Journal') AND "name" = 'identifier');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Journal') AND "name" = 'account');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Journal') AND "name" = 'server');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Journal') AND "name" = 'action');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Journal') AND "name" = 'dateTime');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Journal') AND "name" = 'ip');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Journal') AND "name" = 'details');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Locking');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Locking') AND "name" = 'identifier');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Locking') AND "name" = 'session');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Locking') AND "name" = 'request');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Locking') AND "name" = 'start');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Locking') AND "name" = 'expire');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Locking') AND "name" = 'updates');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Category') WHERE "id" = (SELECT "id" FROM "Category" WHERE "name" = 'Permission');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Permission') AND "name" = 'role');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Permission') AND "name" = 'identifier');
-UPDATE "Identifier" SET "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "categoryId" = (SELECT "id" FROM "Category" WHERE "name" = 'Permission') AND "name" = 'action');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier') AND "name" = 'entity');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier') AND "name" = 'storage');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier') AND "name" = 'status');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier') AND "name" = 'creation');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier') AND "name" = 'change');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier') AND "name" = 'locked');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier') AND "name" = 'version');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Identifier') AND "name" = 'hashsum');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Division');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Division') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Division') AND "name" = 'parent');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Role');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Role') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Role') AND "name" = 'active');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Role') AND "name" = 'division');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account') AND "name" = 'login');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account') AND "name" = 'password');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account') AND "name" = 'active');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account') AND "name" = 'email');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account') AND "name" = 'phone');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account') AND "name" = 'fullNameGiven');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account') AND "name" = 'fullNameMiddle');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Account') AND "name" = 'fullNameSurname');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Catalog');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Catalog') AND "name" = 'parent');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Catalog') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') AND "name" = 'kind');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') AND "name" = 'scope');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') AND "name" = 'store');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') AND "name" = 'allow');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Country');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Country') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'City');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'City') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'City') AND "name" = 'country');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Config');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Config') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Config') AND "name" = 'data');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Session');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Session') AND "name" = 'account');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Session') AND "name" = 'token');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Session') AND "name" = 'ip');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Session') AND "name" = 'data');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor') AND "name" = 'session');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor') AND "name" = 'hashsum');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor') AND "name" = 'created');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor') AND "name" = 'query');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Cursor') AND "name" = 'version');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') AND "name" = 'entity');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'File');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'filename');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'crc32');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'hashsum');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'size');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'mediaType');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'accessLast');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'accessCount');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'compressionFormat');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'compressionSize');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'File') AND "name" = 'compressionRatio');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Server');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Server') AND "name" = 'name');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Server') AND "name" = 'suffix');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Server') AND "name" = 'ip');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Server') AND "name" = 'kind');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Server') AND "name" = 'ports');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Journal');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Journal') AND "name" = 'identifier');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Journal') AND "name" = 'account');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Journal') AND "name" = 'server');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Journal') AND "name" = 'action');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Journal') AND "name" = 'dateTime');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Journal') AND "name" = 'ip');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Journal') AND "name" = 'details');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Locking');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Locking') AND "name" = 'identifier');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Locking') AND "name" = 'session');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Locking') AND "name" = 'request');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Locking') AND "name" = 'start');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Locking') AND "name" = 'expire');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Locking') AND "name" = 'updates');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Entity') WHERE "id" = (SELECT "id" FROM "Entity" WHERE "name" = 'Permission');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Permission') AND "name" = 'role');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Permission') AND "name" = 'identifier');
+UPDATE "Identifier" SET "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Field') WHERE "id" = (SELECT "id" FROM "Field" WHERE "entityId" = (SELECT "id" FROM "Entity" WHERE "name" = 'Permission') AND "name" = 'action');
