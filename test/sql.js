@@ -194,7 +194,7 @@ const metadomain = require('metadomain');
 
   metatests.test('Database.insert into registry', async (test) => {
     const res1 = await db
-      .insert('Unit', { name: 'Quality control' })
+      .insert('Division', { name: 'Quality control' })
       .returning('id');
     test.strictEqual(typeof res1.rows[0].id, 'string');
     test.strictEqual(res1.rowCount, 1);
