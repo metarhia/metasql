@@ -36,7 +36,7 @@
     "node": "16 || 18 || 19 || 20"
   },
   "dependencies": {
-    "metadomain": "^1.0.10",
+    "metadomain": "^2.0.0-alpha.1",
     "metaschema": "^2.1.4",
     "metavm": "^1.2.5",
     "pg": "^8.10.0"
