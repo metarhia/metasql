@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [3.0.0-alpha.1][] - 2023-05-27
+
+- Update metadomain to 2.0.0-alpha.1
+- Change core schema generation
+
 ## [2.1.5][] - 2023-05-01
 
 - Drop node.js 14 support, add node.js 20
@@ -151,7 +156,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v2.1.5...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v3.0.0-alpha.1...HEAD
+[3.0.0-alpha.1]: https://github.com/metarhia/metasql/compare/v2.1.5...v3.0.0-alpha.1
 [2.1.5]: https://github.com/metarhia/metasql/compare/v2.1.4...v2.1.5
 [2.1.4]: https://github.com/metarhia/metasql/compare/v2.1.3...v2.1.4
 [2.1.3]: https://github.com/metarhia/metasql/compare/v2.1.2...v2.1.3
