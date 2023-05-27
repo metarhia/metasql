@@ -62,6 +62,13 @@ const metadomain = require('metadomain');
     test.strictEqual(name, 'Beijing');
     const res4 = await db.select('City', { cityId: '3', name: undefined });
     test.strictEqual(res4[0], { cityId: '3', name: 'Kiev', countryId: '1' });
+    const res5 = await db.select('Country', { name: '@@Soviet | China' });
+    test.strictEqual(res5.length, 2);
+    const res6 = await db.select('Country', { name: '@@People & China' });
+    test.strictEqual(res6[0], {
+      countryId: '2',
+      name: "People's Republic of China",
+    });
     test.end();
   });
 
