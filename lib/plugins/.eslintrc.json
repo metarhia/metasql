@@ -1,16 +1,6 @@
 {
   "globals": {
-    "api": "readonly",
-    "application": "readonly",
-    "config": "readonly",
-    "context": "readonly",
-    "node": "readonly",
-    "npm": "readonly",
-    "lib": "readonly",
-    "db": "readonly",
-    "bus": "readonly",
-    "domain": "readonly",
-    "metarhia": "readonly"
+    "db": "readonly"
   },
   "rules": {
     "no-loop-func": ["off"],
