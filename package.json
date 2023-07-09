@@ -7,11 +7,7 @@
   "bin": {
     "metasql": "bin/cli.js"
   },
-  "files": [
-    "lib/",
-    "bin/",
-    "metasql.d.ts"
-  ],
+  "files": ["lib/", "bin/", "metasql.d.ts"],
   "scripts": {
     "lint": "eslint . && prettier --check \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
     "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/.*rc\" \"**/*.yml\" \"**/*.ts\"",
