@@ -138,7 +138,8 @@ const metadomain = require('metadomain');
     const expected2 =
       'INSERT ' +
       'INTO "City" ("name", "countryId") ' +
-      'VALUES ("Odessa", "4")';
+      'VALUES ("Odessa", "4") ' +
+      'RETURNING *';
     test.strictEqual(sql2, expected2);
 
     test.end();
@@ -174,6 +175,39 @@ const metadomain = require('metadomain');
     const res6 = await db
       .insert('City', { name: 'Mediolanum', countryId: 6 })
       .returning('cityId');
+    const [{ cityId }] = res6.rows;
+
+    const res7 = await db
+      .update('City', { name: '' }, { cityId })
+      .returning(['name']);
+    test.strictEqual(res7.rows[0].name, '');
+
+    await db.delete('City', { cityId }).returning('*');
+    test.end();
+  });
+
+  metatests.test('insert/update/delete: auto-returning', async (test) => {
+    const res1 = await db.insert('City', { name: 'Toulouse', countryId: 1 });
+    test.strictEqual(res1.rowCount, 1);
+    test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
+
+    const res2 = await db.update(
+      'City',
+      { name: 'TOULOUSE', countryId: undefined },
+      { name: 'Toulouse', cityId: undefined },
+    );
+    test.strictEqual(res2.rowCount, 1);
+
+    const res3 = await db.select('City', { name: 'TOULOUSE' });
+    test.contains(res3[0], { name: 'TOULOUSE', countryId: '1' });
+
+    const res4 = await db.delete('City', { name: 'TOULOUSE' }).returning('*');
+    test.strictEqual(res4.rowCount, 1);
+
+    const res5 = await db.update('City', { name: null }, { name: 'TOULOUSE' });
+    test.strictEqual(res5.rowCount, 0);
+
+    const res6 = await db.insert('City', { name: 'Mediolanum', countryId: 6 });
     const [{ cityId }] = res6.rows;
 
     const res7 = await db
