@@ -1,13 +1,31 @@
 INSERT INTO "Country" ("name") VALUES
+  ('First French Empire'),
+  ('The empire of Alexander the Great'),
+  ('Abbasid Caliphate'),
   ('Soviet Union'),
+  ('Empire of Japan'),
+  ('Roman Empire'),
+  ('Nazi Germany'),
   ('People''s Republic of China'),
-  ('Vietnam'),
-  ('Cuba');
+  ('Vietnam');
 
 INSERT INTO "City" ("name", "countryId") VALUES
-  ('Beijing', 2),
-  ('Wuhan', 2),
-  ('Kiev', 1),
-  ('Havana', 4),
-  ('Hanoi', 3),
-  ('Kaliningrad', 1);
+  ('Paris', 1),
+  ('La Haye-en-Touraine', 1),
+  ('Alexandria', 2),
+  ('Athens', 2),
+  ('Baghdad', 3),
+  ('Kufa', 3),
+  ('Cairo', 3),
+  ('Kiev', 4),
+  ('Leningrad', 4),
+  ('Kaliningrad', 4),
+  ('Omsk', 4),
+  ('Tokyo', 5),
+  ('Constantinople', 6),
+  ('Roma', 6),
+  ('Munich', 7),
+  ('Königsberg', 7),
+  ('Beijing', 8),
+  ('Wuhan', 8),
+  ('Hanoi', 9);
