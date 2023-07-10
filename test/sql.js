@@ -149,8 +149,8 @@ const metadomain = require('metadomain');
     const res1 = await db
       .insert('City', { name: 'Odessa', countryId: 4 })
       .returning('cityId');
-    test.strictEqual(res1.rowCount, 1);
-    test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
+    test.strictEqual(res1.length, 1);
+    test.strictEqual(parseInt(res1[0].cityId) > 1, true);
 
     const res2 = await db
       .update(
@@ -159,28 +159,27 @@ const metadomain = require('metadomain');
         { name: 'Odessa', cityId: undefined },
       )
       .returning(['cityId']);
-    test.strictEqual(res2.rowCount, 1);
+    test.strictEqual(res2.length, 1);
 
     const res3 = await db.select('City', { name: 'ODESSA' });
     test.contains(res3[0], { name: 'ODESSA', countryId: '4' });
 
     const res4 = await db.delete('City', { name: 'ODESSA' }).returning('*');
-    test.strictEqual(res4.rowCount, 1);
+    test.strictEqual(res4.length, 1);
 
     const res5 = await db
       .update('City', { name: null }, { name: 'ODESSA' })
       .returning('cityId');
-    test.strictEqual(res5.rowCount, 0);
+    test.strictEqual(res5.length, 0);
 
-    const res6 = await db
+    const [{ cityId }] = await db
       .insert('City', { name: 'Mediolanum', countryId: 6 })
       .returning('cityId');
-    const [{ cityId }] = res6.rows;
 
     const res7 = await db
       .update('City', { name: '' }, { cityId })
       .returning(['name']);
-    test.strictEqual(res7.rows[0].name, '');
+    test.strictEqual(res7[0].name, '');
 
     await db.delete('City', { cityId }).returning('*');
     test.end();
@@ -188,32 +187,34 @@ const metadomain = require('metadomain');
 
   metatests.test('insert/update/delete: auto-returning', async (test) => {
     const res1 = await db.insert('City', { name: 'Toulouse', countryId: 1 });
-    test.strictEqual(res1.rowCount, 1);
-    test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
+    test.strictEqual(res1.length, 1);
+    test.strictEqual(parseInt(res1[0].cityId) > 1, true);
 
     const res2 = await db.update(
       'City',
       { name: 'TOULOUSE', countryId: undefined },
       { name: 'Toulouse', cityId: undefined },
     );
-    test.strictEqual(res2.rowCount, 1);
+    test.strictEqual(res2.length, 1);
 
     const res3 = await db.select('City', { name: 'TOULOUSE' });
     test.contains(res3[0], { name: 'TOULOUSE', countryId: '1' });
 
     const res4 = await db.delete('City', { name: 'TOULOUSE' }).returning('*');
-    test.strictEqual(res4.rowCount, 1);
+    test.strictEqual(res4.length, 1);
 
     const res5 = await db.update('City', { name: null }, { name: 'TOULOUSE' });
-    test.strictEqual(res5.rowCount, 0);
+    test.strictEqual(res5.length, 0);
 
-    const res6 = await db.insert('City', { name: 'Mediolanum', countryId: 6 });
-    const [{ cityId }] = res6.rows;
+    const [{ cityId }] = await db.insert('City', {
+      name: 'Mediolanum',
+      countryId: 6,
+    });
 
     const res7 = await db
       .update('City', { name: '' }, { cityId })
       .returning(['name']);
-    test.strictEqual(res7.rows[0].name, '');
+    test.strictEqual(res7[0].name, '');
 
     await db.delete('City', { cityId }).returning('*');
     test.end();
@@ -223,8 +224,8 @@ const metadomain = require('metadomain');
     const res1 = await db
       .insert('Division', { name: 'Quality control' })
       .returning('id');
-    test.strictEqual(typeof res1.rows[0].id, 'string');
-    test.strictEqual(res1.rowCount, 1);
+    test.strictEqual(typeof res1[0].id, 'string');
+    test.strictEqual(res1.length, 1);
     test.end();
   });
 
@@ -266,12 +267,12 @@ const metadomain = require('metadomain');
     const res1 = await db
       .insert('Counter', { value: 1 })
       .returning('counterId');
-    const { counterId } = res1.rows[0];
+    const { counterId } = res1[0];
 
     const res2 = await db
       .update('Counter', { value: 0 }, { counterId })
       .returning('value');
-    const { value } = res2.rows[0];
+    const { value } = res2[0];
     test.strictEqual(value, '0');
 
     const [row] = await db.select('Counter', ['value'], { counterId });
