@@ -26,11 +26,11 @@ const metadomain = require('metadomain');
   });
 
   metatests.test('database.query', async (test) => {
-    const res = await db.query('SELECT * FROM "City" WHERE "cityId" = $1', [3]);
+    const res = await db.query('SELECT * FROM "City" WHERE "cityId" = $1', [1]);
     test.strictEqual(res.constructor.name, 'Result');
     test.strictEqual(res.rows.constructor.name, 'Array');
     test.strictEqual(res.rows.length, 1);
-    test.strictEqual(res.rows[0].name, 'Kiev');
+    test.strictEqual(res.rows[0].name, 'Paris');
     test.end();
   });
 
@@ -48,28 +48,28 @@ const metadomain = require('metadomain');
   });
 
   metatests.test('database.select', async (test) => {
-    const res1 = await db.select('City', ['*'], { cityId: 3 });
+    const res1 = await db.select('City', ['*'], { cityId: 1 });
     test.strictEqual(res1.length, 1);
-    test.strictEqual(res1[0], { cityId: '3', name: 'Kiev', countryId: '1' });
-    const res2 = await db.select('City', { cityId: 3 });
+    test.strictEqual(res1[0], { cityId: '1', name: 'Paris', countryId: '1' });
+    const res2 = await db.select('City', { cityId: 1 });
     test.strictEqual(res2.length, 1);
-    test.strictEqual(res2[0], { cityId: '3', name: 'Kiev', countryId: '1' });
+    test.strictEqual(res2[0], { cityId: '1', name: 'Paris', countryId: '1' });
     const res3 = await db.select('City');
     const { cityId, name } = res3[0];
     test.strictEqual(cityId, '1');
-    test.strictEqual(name, 'Beijing');
-    const res4 = await db.select('City', { cityId: '3', name: undefined });
-    test.strictEqual(res4[0], { cityId: '3', name: 'Kiev', countryId: '1' });
+    test.strictEqual(name, 'Paris');
+    const res4 = await db.select('City', { cityId: '1', name: undefined });
+    test.strictEqual(res4[0], { cityId: '1', name: 'Paris', countryId: '1' });
     test.end();
   });
 
   metatests.test('database.select.then', async (test) => {
     await db
-      .select('City', ['*'], { cityId: 3 })
+      .select('City', ['*'], { cityId: 1 })
       .then((cities) => cities[0])
       .then((city) => {
         test.pass('Sequential then is called properly');
-        test.strictEqual(city, { cityId: '3', name: 'Kiev', countryId: '1' });
+        test.strictEqual(city, { cityId: '1', name: 'Paris', countryId: '1' });
       });
 
     test.end();
@@ -78,33 +78,33 @@ const metadomain = require('metadomain');
   metatests.test('database.select and/or', async (test) => {
     const res = await db.select('City', ['*'], { cityId: 1 }, { name: 'Kiev' });
     test.strictEqual(res.length, 2);
-    test.strictEqual(res[0], { cityId: '1', name: 'Beijing', countryId: '2' });
-    test.strictEqual(res[1], { cityId: '3', name: 'Kiev', countryId: '1' });
+    test.strictEqual(res[0], { cityId: '1', name: 'Paris', countryId: '1' });
+    test.strictEqual(res[1], { cityId: '8', name: 'Kiev', countryId: '4' });
     test.end();
   });
 
   metatests.test('query.limit/offset', async (test) => {
     const res1 = await db.select('City').limit(3);
     test.strictEqual(res1.length, 3);
-    test.strictEqual(res1[0].name, 'Beijing');
+    test.strictEqual(res1[0].name, 'Paris');
     const res2 = await db.select('City').offset(2).limit(4);
     test.strictEqual(res2.length, 4);
-    test.strictEqual(res2[0].name, 'Kiev');
+    test.strictEqual(res2[0].name, 'Alexandria');
     const res3 = await db.select('City').limit(4).offset(1);
     test.strictEqual(res3.length, 4);
-    test.strictEqual(res3[0].name, 'Wuhan');
+    test.strictEqual(res3[0].name, 'La Haye-en-Touraine');
     test.end();
   });
 
   metatests.test('query.order/desc', async (test) => {
     const res1 = await db.select('City').order('name');
-    test.strictEqual(res1[0].name, 'Beijing');
+    test.strictEqual(res1[0].name, 'Alexandria');
     const res2 = await db.select('City').desc('name');
     test.strictEqual(res2[0].name, 'Wuhan');
     const res3 = await db.select('City').order('name').desc('name');
     test.strictEqual(res3[0].name, 'Wuhan');
     const res4 = await db.select('City').desc('name').order('name');
-    test.strictEqual(res4[0].name, 'Beijing');
+    test.strictEqual(res4[0].name, 'Alexandria');
     test.end();
   });
 
@@ -123,22 +123,22 @@ const metadomain = require('metadomain');
     };
     test.strictEqual(metadata, expected);
     const res = await Query.from(db, metadata);
-    test.strictEqual(res, [{ cityId: '3', name: 'Kiev', countryId: '1' }]);
+    test.strictEqual(res, [{ cityId: '1', name: 'Paris', countryId: '1' }]);
     test.end();
   });
 
   metatests.test('query.toString', async (test) => {
-    const query1 = db.select('City', ['*'], { name: 'Kiev' });
+    const query1 = db.select('City', ['*'], { name: 'Paris' });
     const sql1 = query1.toString();
-    const expected1 = 'SELECT * FROM "City" WHERE "name" = "Kiev"';
+    const expected1 = 'SELECT * FROM "City" WHERE "name" = "Paris"';
     test.strictEqual(sql1, expected1);
 
-    const query2 = db.insert('City', { name: 'Odessa', countryId: 1 });
+    const query2 = db.insert('City', { name: 'Odessa', countryId: 4 });
     const sql2 = query2.toString();
     const expected2 =
       'INSERT ' +
       'INTO "City" ("name", "countryId") ' +
-      'VALUES ("Odessa", "1")';
+      'VALUES ("Odessa", "4")';
     test.strictEqual(sql2, expected2);
 
     test.end();
@@ -146,7 +146,7 @@ const metadomain = require('metadomain');
 
   metatests.test('insert/update/delete: normal and falsy', async (test) => {
     const res1 = await db
-      .insert('City', { name: 'Odessa', countryId: 1 })
+      .insert('City', { name: 'Odessa', countryId: 4 })
       .returning('cityId');
     test.strictEqual(res1.rowCount, 1);
     test.strictEqual(parseInt(res1.rows[0].cityId) > 1, true);
@@ -161,7 +161,7 @@ const metadomain = require('metadomain');
     test.strictEqual(res2.rowCount, 1);
 
     const res3 = await db.select('City', { name: 'ODESSA' });
-    test.contains(res3[0], { name: 'ODESSA', countryId: '1' });
+    test.contains(res3[0], { name: 'ODESSA', countryId: '4' });
 
     const res4 = await db.delete('City', { name: 'ODESSA' }).returning('*');
     test.strictEqual(res4.rowCount, 1);
@@ -172,7 +172,7 @@ const metadomain = require('metadomain');
     test.strictEqual(res5.rowCount, 0);
 
     const res6 = await db
-      .insert('City', { name: 'Kharkiv', countryId: 1 })
+      .insert('City', { name: 'Mediolanum', countryId: 6 })
       .returning('cityId');
     const [{ cityId }] = res6.rows;
 
@@ -195,14 +195,14 @@ const metadomain = require('metadomain');
   });
 
   metatests.test('database.row', async (test) => {
-    const res = await db.row('City', ['*'], { name: 'Kiev' });
-    test.strictEqual(res, { cityId: '3', name: 'Kiev', countryId: '1' });
+    const res = await db.row('City', ['*'], { name: 'Paris' });
+    test.strictEqual(res, { cityId: '1', name: 'Paris', countryId: '1' });
     test.end();
   });
 
   metatests.test('database.scalar', async (test) => {
-    const res = await db.scalar('City', ['name'], { name: 'Kiev' });
-    test.strictEqual(res, 'Kiev');
+    const res = await db.scalar('City', ['name'], { name: 'Paris' });
+    test.strictEqual(res, 'Paris');
     test.end();
   });
 
@@ -215,15 +215,15 @@ const metadomain = require('metadomain');
   metatests.test('database.dict', async (test) => {
     const res = await db.dict('City', ['name', 'countryId']);
     test.strictEqual(typeof res, 'object');
-    const key = 'Kiev';
+    const key = 'Paris';
     test.strictEqual(res[key], '1');
     test.end();
   });
 
   metatests.test('database.count', async (test) => {
     const res1 = await db.count('Country');
-    test.strictEqual(res1, 4);
-    const res2 = await db.count('City', { name: 'Kiev' });
+    test.strictEqual(res1, 9);
+    const res2 = await db.count('City', { name: 'Paris' });
     test.strictEqual(res2, 1);
     test.end();
   });
