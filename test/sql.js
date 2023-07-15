@@ -34,6 +34,66 @@ const metadomain = require('metadomain');
     test.end();
   });
 
+  metatests.test('database.sql', async (test) => {
+    const id = 1;
+
+    const query1 = db.sql`
+      SELECT * FROM "City"
+      WHERE "cityId" = ${id}
+    `;
+    const res1 = await query1.rows();
+    test.strictEqual(res1.constructor.name, 'Array');
+    test.strictEqual(res1.length, 1);
+    test.strictEqual(res1[0], { cityId: '1', name: 'Paris', countryId: '1' });
+
+    const query2 = db.sql`
+      SELECT * FROM "City"
+      WHERE "cityId" = ${'id'}
+    `;
+    const res2 = await query2.row({ id });
+    test.strictEqual(res2, { cityId: '1', name: 'Paris', countryId: '1' });
+
+    const query3 = db.sql`
+      SELECT name FROM "City"
+      WHERE "cityId" = ${id}
+    `;
+    const res3 = await query3.scalar();
+    test.strictEqual(res3, 'Paris');
+
+    const query4 = db.sql`
+      SELECT name FROM "City"
+      WHERE "cityId" > ${5} AND "cityId" < ${10}
+      ORDER BY name
+    `;
+    const res4 = await query4.col('name');
+    test.strictEqual(res4, ['Cairo', 'Kiev', 'Kufa', 'Leningrad']);
+
+    const query5 = db.sql`
+      SELECT count(*) FROM "City"
+      WHERE "cityId" > ${5} AND "cityId" < ${10}
+    `;
+    const res5 = await query5.count();
+    test.strictEqual(res5, 4);
+
+    const query6 = db.sql`
+      SELECT * FROM "City"
+      WHERE "cityId" < ${5} AND "name" <> 'La Haye-en-Touraine'
+      ORDER BY name
+      LIMIT 3
+    `;
+    const res6 = await query6.dict('name', 'cityId');
+    test.strictEqual(
+      { ...res6 },
+      {
+        Alexandria: '3',
+        Athens: '4',
+        Paris: '1',
+      },
+    );
+
+    test.end();
+  });
+
   metatests.test('database.query error', async (test) => {
     try {
       await db.query('INVALID SQL');
