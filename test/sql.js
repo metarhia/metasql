@@ -48,9 +48,9 @@ const metadomain = require('metadomain');
 
     const query2 = db.sql`
       SELECT * FROM "City"
-      WHERE "cityId" = ${id}
+      WHERE "cityId" = ${'id'}
     `;
-    const res2 = await query2.row();
+    const res2 = await query2.row({ id });
     test.strictEqual(res2, { cityId: '1', name: 'Paris', countryId: '1' });
 
     const query3 = db.sql`
