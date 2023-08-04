@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- Add SQL array type support in createEntity
+
 ## [3.0.0-alpha.1][] - 2023-05-27
 
 - Update metadomain to 2.0.0-alpha.1
