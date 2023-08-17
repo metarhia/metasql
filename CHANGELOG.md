@@ -6,7 +6,7 @@
 
 - Implement sql templates
 - Fix `Modify.then` for compatibility with `Query.then`
-- Auto returnung * as a quick patch
+- Auto returnung \* as a quick patch
 
 ## [3.0.0-alpha.1][] - 2023-05-27
 
