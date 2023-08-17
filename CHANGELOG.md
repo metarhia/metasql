@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [3.0.0-alpha.2][] - 2023-08-17
+
+- Implement sql templates
+- Fix `Modify.then` for compatibility with `Query.then`
+- Auto returnung * as a quick patch
+
 ## [3.0.0-alpha.1][] - 2023-05-27
 
 - Update metadomain to 2.0.0-alpha.1
@@ -156,7 +162,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v3.0.0-alpha.1...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v3.0.0-alpha.2...HEAD
+[3.0.0-alpha.2]: https://github.com/metarhia/metasql/compare/v3.0.0-alpha.1...v3.0.0-alpha.2
 [3.0.0-alpha.1]: https://github.com/metarhia/metasql/compare/v2.1.5...v3.0.0-alpha.1
 [2.1.5]: https://github.com/metarhia/metasql/compare/v2.1.4...v2.1.5
 [2.1.4]: https://github.com/metarhia/metasql/compare/v2.1.3...v2.1.4
