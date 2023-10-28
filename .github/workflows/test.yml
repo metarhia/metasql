@@ -6,13 +6,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: node:${{ matrix.node }}-alpine
-
     strategy:
       matrix:
         node:
           - 18
           - 20
-
+          - 21
     services:
       postgres:
         image: postgres
