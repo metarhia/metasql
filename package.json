@@ -42,7 +42,7 @@
   "dependencies": {
     "metadomain": "^2.0.0-alpha.1",
     "metaschema": "^2.1.5",
-    "metavm": "^1.2.6",
+    "metavm": "^1.3.0",
     "pg": "^8.11.3"
   },
   "devDependencies": {
