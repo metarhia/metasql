@@ -143,6 +143,14 @@ const metadomain = require('metadomain');
     test.end();
   });
 
+  metatests.test('database.select in []', async (test) => {
+    const res = await db.select('City', ['*'], { cityId: [1, 8] });
+    test.strictEqual(res.length, 2);
+    test.strictEqual(res[0], { cityId: '1', name: 'Paris', countryId: '1' });
+    test.strictEqual(res[1], { cityId: '8', name: 'Kiev', countryId: '4' });
+    test.end();
+  });
+
   metatests.test('query.limit/offset', async (test) => {
     const res1 = await db.select('City').limit(3);
     test.strictEqual(res1.length, 3);
