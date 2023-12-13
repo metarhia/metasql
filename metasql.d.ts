@@ -59,6 +59,8 @@ export class Query {
   );
   order(field: string | Array<string>): Query;
   desc(field: string | Array<string>): Query;
+  distinct(distinct: boolean): Query;
+  distinctOn(fields: Array<string>): Query;
   limit(count: number): Query;
   offset(count: number): Query;
   then(
