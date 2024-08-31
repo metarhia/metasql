@@ -15,6 +15,6 @@ migrations auto generation, queries and introspection.
 
 ## License & Contributors
 
-Copyright (c) 2019-2023 [Metarhia contributors](https://github.com/metarhia/metasql/graphs/contributors).
+Copyright (c) 2019-2024 [Metarhia contributors](https://github.com/metarhia/metasql/graphs/contributors).
 Metasql is [MIT licensed](./LICENSE).\
 Metasql is a part of [Metarhia](https://github.com/metarhia) technology stack.
