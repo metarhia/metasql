@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [3.0.0-alpha.3][] - 2024-08-31
+
+- Update eslint to 9.x and prettier with configs
+- Add node.js 22 to CI
+
 ## [3.0.0-alpha.2][] - 2023-08-17
 
 - Implement sql templates
@@ -162,7 +167,8 @@
 
 Code before fork from https://github.com/metarhia/sql
 
-[unreleased]: https://github.com/metarhia/metasql/compare/v3.0.0-alpha.2...HEAD
+[unreleased]: https://github.com/metarhia/metasql/compare/v3.0.0-alpha.3...HEAD
+[3.0.0-alpha.3]: https://github.com/metarhia/metasql/compare/v3.0.0-alpha.2...v3.0.0-alpha.3
 [3.0.0-alpha.2]: https://github.com/metarhia/metasql/compare/v3.0.0-alpha.1...v3.0.0-alpha.2
 [3.0.0-alpha.1]: https://github.com/metarhia/metasql/compare/v2.1.5...v3.0.0-alpha.1
 [2.1.5]: https://github.com/metarhia/metasql/compare/v2.1.4...v2.1.5
