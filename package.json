@@ -40,18 +40,18 @@
     "node": "18 || 20 || 21 || 22 || 23 || 24"
   },
   "dependencies": {
-    "metadomain": "^2.0.0-alpha.1",
-    "metaschema": "^2.2.0",
-    "metavm": "^1.4.1",
-    "pg": "^8.11.3"
+    "metadomain": "^2.0.0-alpha.2",
+    "metaschema": "^2.2.2",
+    "metavm": "^1.4.4",
+    "pg": "^8.16.0"
   },
   "devDependencies": {
-    "@types/node": "^22.5.1",
+    "@types/node": "^24.0.1",
     "@types/pg": "^8.10.2",
-    "eslint": "^9.9.1",
-    "eslint-config-metarhia": "^9.0.5",
-    "metatests": "^0.8.2",
-    "prettier": "^3.3.3",
-    "typescript": "^5.5.4"
+    "eslint": "^9.29.0",
+    "eslint-config-metarhia": "^9.1.2",
+    "metatests": "^0.9.1",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
   }
 }
