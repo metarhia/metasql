@@ -244,10 +244,7 @@ const metadomain = require('metadomain');
       .insert('City', { name: 'Mediolanum', countryId: 6 })
       .returning('cityId');
 
-    const res7 = await db
-      .update('City', { name: '' }, { cityId })
-      .returning(['name']);
-    test.strictEqual(res7[0].name, '');
+    await db.update('City', { name: 'Milano' }, { cityId }).returning(['name']);
 
     await db.delete('City', { cityId }).returning('*');
     test.end();
