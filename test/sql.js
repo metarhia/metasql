@@ -346,4 +346,14 @@ const metadomain = require('metadomain');
     await db.delete('Counter', { counterId });
     test.end();
   });
+
+  metatests.test('query.distinct/distinctOn', async (test) => {
+    const res1 = await db.select('City', ['countryId']).distinct();
+    test.strictSame(res1.length, 9);
+
+    const res2 = await db.select('City').distinctOn(['countryId']);
+    test.strictSame(res2.length, 9);
+
+    test.end();
+  });
 })();
