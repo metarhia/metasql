@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/metarhia/metasql#readme",
   "engines": {
-    "node": "18 || 20 || 21 || 22 || 23 || 24"
+    "node": ">=18"
   },
   "dependencies": {
     "metadomain": "^2.0.0-alpha.2",
